@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LWT — TABS System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #111111;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 38px 38px;
+    pointer-events: none;
+  }
+
+  /* ── Header ───────────────────────────── */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    opacity: 0;
+    transform: translateY(18px);
+    animation: riseIn 0.7s ease-out 0.2s forwards;
+  }
+  .header-label {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: #E8684A;
+    margin-bottom: 12px;
+  }
+  .header-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: #FAF7F2;
+    line-height: 1.2;
+  }
+  .header-title em { color: #E8684A; font-style: italic; }
+  .header-sub {
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(250,247,242,0.45);
+    margin-top: 9px;
+    letter-spacing: 0.2px;
+  }
+
+  /* ── Cards row ────────────────────────── */
+  .cards {
+    display: flex;
+    gap: 18px;
+    align-items: stretch;
+  }
+
+  .card {
+    width: 210px;
+    background: rgba(255,255,255,0.035);
+    border-radius: 16px;
+    padding: 36px 22px 30px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(60px);
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  .card:hover {
+    background: rgba(255,255,255,0.065);
+  }
+
+  /* colored left border accent */
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 3px;
+    border-radius: 16px 0 0 16px;
+  }
+  .card.t-card::before { background: #E8684A; }
+  .card.a-card::before { background: #D4A843; }
+  .card.b-card::before { background: #8B9D6A; }
+  .card.s-card::before { background: rgba(250,247,242,0.5); }
+
+  /* top border */
+  .card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+  }
+  .card.t-card::after { background: linear-gradient(90deg, #E8684A, transparent); }
+  .card.a-card::after { background: linear-gradient(90deg, #D4A843, transparent); }
+  .card.b-card::after { background: linear-gradient(90deg, #8B9D6A, transparent); }
+  .card.s-card::after { background: linear-gradient(90deg, rgba(250,247,242,0.5), transparent); }
+
+  /* corner glow */
+  .card-glow {
+    position: absolute;
+    top: -30px; left: -30px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    opacity: 0.07;
+    filter: blur(30px);
+    pointer-events: none;
+  }
+  .t-card .card-glow { background: #E8684A; }
+  .a-card .card-glow { background: #D4A843; }
+  .b-card .card-glow { background: #8B9D6A; }
+  .s-card .card-glow { background: #FAF7F2; }
+
+  /* big letter */
+  .card-letter {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 72px;
+    line-height: 1;
+    letter-spacing: -2px;
+    margin-bottom: 4px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .card.visible .card-letter {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .t-card .card-letter { color: #E8684A; }
+  .a-card .card-letter { color: #D4A843; }
+  .b-card .card-letter { color: #8B9D6A; }
+  .s-card .card-letter { color: rgba(250,247,242,0.85); }
+
+  /* word */
+  .card-word {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: #FAF7F2;
+    margin-bottom: 16px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease 0.08s, transform 0.4s ease 0.08s;
+  }
+  .card.visible .card-word {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* divider */
+  .card-divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin-bottom: 16px;
+    opacity: 0;
+    transition: opacity 0.4s ease 0.14s;
+  }
+  .card.visible .card-divider { opacity: 1; }
+
+  /* description */
+  .card-desc {
+    font-size: 12.5px;
+    font-weight: 300;
+    line-height: 1.65;
+    color: rgba(250,247,242,0.58);
+    flex: 1;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s;
+  }
+  .card.visible .card-desc {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* tag */
+  .card-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 20px;
+    padding: 5px 11px;
+    border-radius: 100px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 8.5px;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.4s ease 0.28s;
+    align-self: flex-start;
+  }
+  .card.visible .card-tag { opacity: 1; }
+  .t-card .card-tag { background: rgba(232,104,74,0.12); color: #E8684A; border: 1px solid rgba(232,104,74,0.25); }
+  .a-card .card-tag { background: rgba(212,168,67,0.12); color: #D4A843; border: 1px solid rgba(212,168,67,0.25); }
+  .b-card .card-tag { background: rgba(139,157,106,0.12); color: #8B9D6A; border: 1px solid rgba(139,157,106,0.25); }
+  .s-card .card-tag { background: rgba(250,247,242,0.07); color: rgba(250,247,242,0.65); border: 1px solid rgba(250,247,242,0.15); }
+
+  /* ── Card entrance ───────────────────── */
+  @keyframes cardUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card.visible {
+    animation: cardUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  /* ── Connector dots ──────────────────── */
+  .connector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .connector.show { opacity: 1; }
+  .connector-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+  }
+
+  /* ── Replay ──────────────────────────── */
+  .replay-wrap {
+    margin-top: 44px;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .replay-btn {
+    background: none;
+    border: 1px solid rgba(232,104,74,0.4);
+    color: #E8684A;
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .replay-btn:hover { background: rgba(232,104,74,0.1); border-color: #E8684A; }
+
+  /* ── Brand ───────────────────────────── */
+  .brand {
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #E8684A;
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    opacity: 0.3;
+  }
+
+  @keyframes riseIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">▶ The System</div>
+  <div class="header-title">Built for how your brain <em>actually</em> works.</div>
+  <div class="header-sub">Four pillars. One system. Yours — from day one.</div>
+</div>
+
+<div class="cards" id="cards">
+
+  <!-- T -->
+  <div class="card t-card" id="c-t">
+    <div class="card-glow"></div>
+    <div class="card-letter">T</div>
+    <div class="card-word">Time</div>
+    <div class="card-divider"></div>
+    <div class="card-desc">Your brain doesn't do rigid schedules — it does <em>containers</em>. Protected blocks, one project at a time. No timer guilt. Just focus windows that fit how you actually move.</div>
+    <div class="card-tag">⏱ Time Containers</div>
+  </div>
+
+  <!-- A -->
+  <div class="card a-card" id="c-a">
+    <div class="card-glow"></div>
+    <div class="card-letter">A</div>
+    <div class="card-word">Anchors</div>
+    <div class="card-divider"></div>
+    <div class="card-desc">The small, consistent actions that keep everything from unraveling. Morning check-ins, end-of-day reviews, weekly resets — lightweight habits that hold your system together.</div>
+    <div class="card-tag">⚓ Anchor Routines</div>
+  </div>
+
+  <!-- B -->
+  <div class="card b-card" id="c-b">
+    <div class="card-glow"></div>
+    <div class="card-letter">B</div>
+    <div class="card-word">Brain Dump</div>
+    <div class="card-divider"></div>
+    <div class="card-desc">Every idea, task, and worry — out of your head and into a trusted place. Your brain stops holding it all. The mental clutter clears. And the right things finally get done.</div>
+    <div class="card-tag">🧠 Capture Everything</div>
+  </div>
+
+  <!-- S -->
+  <div class="card s-card" id="c-s">
+    <div class="card-glow"></div>
+    <div class="card-letter">S</div>
+    <div class="card-word">Steps</div>
+    <div class="card-divider"></div>
+    <div class="card-desc">Big projects don't move until they're broken down. TABS turns your goals into the next doable action — concrete, specific, sized for a brain that needs momentum to start.</div>
+    <div class="card-tag">🪜 Next Actions</div>
+  </div>
+
+</div>
+
+<div class="replay-wrap" id="replayWrap">
+  <button class="replay-btn" onclick="runAll()">↺ Replay</button>
+</div>
+
+<div class="brand">Life With Tabs™</div>
+
+<script>
+const cards = [
+  { id: 'c-t', delay: 300  },
+  { id: 'c-a', delay: 600  },
+  { id: 'c-b', delay: 900  },
+  { id: 'c-s', delay: 1200 },
+];
+
+function runAll() {
+  // Reset
+  cards.forEach(({ id }) => {
+    const el = document.getElementById(id);
+    el.classList.remove('visible');
+    el.style.opacity = 0;
+    el.style.transform = 'translateY(60px)';
+    el.style.animation = 'none';
+  });
+  document.getElementById('replayWrap').style.opacity = 0;
+
+  // Re-run after brief pause
+  setTimeout(() => {
+    cards.forEach(({ id, delay }) => {
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        el.style.animation = '';
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          el.classList.add('visible');
+        }));
+      }, delay);
+    });
+
+    // Replay button
+    setTimeout(() => {
+      document.getElementById('replayWrap').style.opacity = 1;
+    }, 2800);
+  }, 120);
+}
+
+window.addEventListener('load', () => setTimeout(runAll, 300));
+</script>
+</body>
+</html>
