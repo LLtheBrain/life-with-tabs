@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LWT — Stat Counters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #111111;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* ── Subtle dot grid background ────────────────── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 36px 36px;
+    pointer-events: none;
+  }
+
+  /* ── Header text ────────────────────────────────── */
+  .header {
+    text-align: center;
+    margin-bottom: 52px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: riseIn 0.8s ease-out 0.2s forwards;
+  }
+  .header-label {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: #E8684A;
+    margin-bottom: 14px;
+  }
+  .header-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: #FAF7F2;
+    line-height: 1.15;
+    letter-spacing: -0.3px;
+  }
+  .header-title em {
+    color: #E8684A;
+    font-style: italic;
+  }
+  .header-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: rgba(250,247,242,0.45);
+    margin-top: 10px;
+    letter-spacing: 0.2px;
+  }
+
+  /* ── Cards row ──────────────────────────────────── */
+  .cards {
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+  }
+
+  .card {
+    width: 200px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 32px 20px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .card:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.14);
+  }
+
+  /* top accent bar */
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 14px 14px 0 0;
+  }
+  .card.c-coral::before  { background: #E8684A; }
+  .card.c-amber::before  { background: #D4A843; }
+  .card.c-olive::before  { background: #8B9D6A; }
+  .card.c-cream::before  { background: rgba(250,247,242,0.4); }
+
+  /* bottom glow */
+  .card::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 50%;
+    transform: translateX(-50%);
+    width: 120px; height: 80px;
+    border-radius: 50%;
+    opacity: 0.12;
+    filter: blur(20px);
+  }
+  .card.c-coral::after  { background: #E8684A; }
+  .card.c-amber::after  { background: #D4A843; }
+  .card.c-olive::after  { background: #8B9D6A; }
+  .card.c-cream::after  { background: #FAF7F2; }
+
+  /* icon */
+  .card-icon {
+    font-size: 20px;
+    margin-bottom: 18px;
+    opacity: 0.75;
+  }
+
+  /* number */
+  .card-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 46px;
+    line-height: 1;
+    letter-spacing: -1px;
+    margin-bottom: 14px;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card.c-coral .card-num  { color: #E8684A; }
+  .card.c-amber .card-num  { color: #D4A843; }
+  .card.c-olive .card-num  { color: #8B9D6A; }
+  .card.c-cream .card-num  { color: #FAF7F2; }
+
+  /* label */
+  .card-label {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: rgba(250,247,242,0.60);
+    letter-spacing: 0.1px;
+  }
+
+  /* source note */
+  .card-source {
+    font-size: 9.5px;
+    font-weight: 300;
+    color: rgba(250,247,242,0.22);
+    margin-top: 12px;
+    font-style: italic;
+  }
+
+  /* divider line between number and label */
+  .card-divider {
+    width: 28px;
+    height: 1px;
+    background: rgba(255,255,255,0.12);
+    margin: 0 auto 14px;
+  }
+
+  /* ── Entrance animations ─────────────────────────── */
+  @keyframes riseIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card.visible {
+    animation: cardIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  @keyframes cardIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Replay button ───────────────────────────────── */
+  .replay {
+    margin-top: 48px;
+    opacity: 0;
+    animation: riseIn 0.6s ease-out 3.5s forwards;
+  }
+  .replay-btn {
+    background: none;
+    border: 1px solid rgba(232,104,74,0.4);
+    color: #E8684A;
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .replay-btn:hover {
+    background: rgba(232,104,74,0.1);
+    border-color: #E8684A;
+  }
+
+  /* ── Brand ───────────────────────────────────────── */
+  .brand {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #E8684A;
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    opacity: 0.35;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">▶ The Market Nobody's Solving For</div>
+  <div class="header-title">ADHD entrepreneurs are a <em>massive,</em><br>underserved, high-intent market.</div>
+  <div class="header-sub">And not a single solution was built the right way — until now.</div>
+</div>
+
+<div class="cards">
+
+  <div class="card c-coral" id="c1" data-prefix="" data-target="16" data-suffix="M+" data-icon="🧠" data-label="Adults with ADHD\nin the United States" data-source="CDC / CHADD estimates">
+    <div class="card-icon">🧠</div>
+    <div class="card-num" id="n1">0</div>
+    <div class="card-divider"></div>
+    <div class="card-label">Adults with ADHD<br>in the United States</div>
+    <div class="card-source">CDC / CHADD estimates</div>
+  </div>
+
+  <div class="card c-amber" id="c2" data-prefix="~" data-target="4" data-suffix="M" data-icon="🚀" data-label="ADHD entrepreneurs\nactively building" data-source="Estimated from SBA + ADHD prevalence data">
+    <div class="card-icon">🚀</div>
+    <div class="card-num" id="n2">0</div>
+    <div class="card-divider"></div>
+    <div class="card-label">ADHD entrepreneurs<br>actively building</div>
+    <div class="card-source">SBA + ADHD prevalence data</div>
+  </div>
+
+  <div class="card c-olive" id="c3" data-prefix="" data-target="3" data-suffix="×" data-icon="📈" data-label="More likely to start a business\nthan neurotypical peers" data-source="Journal of Attention Disorders">
+    <div class="card-icon">📈</div>
+    <div class="card-num" id="n3">0</div>
+    <div class="card-divider"></div>
+    <div class="card-label">More likely to start a business<br>than neurotypical peers</div>
+    <div class="card-source">Journal of Attention Disorders</div>
+  </div>
+
+  <div class="card c-cream" id="c4" data-prefix="$" data-target="60" data-suffix="B" data-icon="💸" data-label="Estimated lost annually to\nADHD productivity gaps" data-source="Workplace ADHD cost estimates">
+    <div class="card-icon">💸</div>
+    <div class="card-num" id="n4">0</div>
+    <div class="card-divider"></div>
+    <div class="card-label">Estimated lost annually to<br>ADHD productivity gaps</div>
+    <div class="card-source">Workplace ADHD cost estimates</div>
+  </div>
+
+</div>
+
+<div class="replay">
+  <button class="replay-btn" onclick="runAll()">↺ Replay</button>
+</div>
+
+<div class="brand">Life With Tabs™</div>
+
+<script>
+// ── Easing ─────────────────────────────────────────────────────
+function easeOut(t) { return 1 - Math.pow(1 - t, 4); }
+function easeOutBounce(t) {
+  if (t < 1/2.75) return 7.5625 * t * t;
+  if (t < 2/2.75) { t -= 1.5/2.75; return 7.5625*t*t + 0.75; }
+  if (t < 2.5/2.75) { t -= 2.25/2.75; return 7.5625*t*t + 0.9375; }
+  t -= 2.625/2.75; return 7.5625*t*t + 0.984375;
+}
+
+// ── Counter ───────────────────────────────────────────────────
+function animateCounter(el, prefix, target, suffix, duration, delay, decimals=0) {
+  setTimeout(() => {
+    const start = performance.now();
+    function frame(now) {
+      const elapsed = now - start;
+      const t = Math.min(elapsed / duration, 1);
+      const val = easeOut(t) * target;
+      el.textContent = prefix + (decimals ? val.toFixed(decimals) : Math.floor(val)) + suffix;
+      if (t < 1) requestAnimationFrame(frame);
+      else el.textContent = prefix + target + suffix;
+    }
+    requestAnimationFrame(frame);
+  }, delay);
+}
+
+// ── Card entrance ─────────────────────────────────────────────
+function showCard(cardEl, delay) {
+  setTimeout(() => {
+    cardEl.classList.add('visible');
+  }, delay);
+}
+
+// ── Config ────────────────────────────────────────────────────
+const stats = [
+  { card: 'c1', num: 'n1', prefix: '',  target: 16, suffix: 'M+', duration: 1800, cardDelay: 300,  counterDelay: 500  },
+  { card: 'c2', num: 'n2', prefix: '~', target: 4,  suffix: 'M',  duration: 1600, cardDelay: 650,  counterDelay: 850  },
+  { card: 'c3', num: 'n3', prefix: '',  target: 3,  suffix: '×',  duration: 1200, cardDelay: 1000, counterDelay: 1200 },
+  { card: 'c4', num: 'n4', prefix: '$', target: 60, suffix: 'B',  duration: 2000, cardDelay: 1350, counterDelay: 1550 },
+];
+
+function runAll() {
+  // reset
+  stats.forEach(s => {
+    const card = document.getElementById(s.card);
+    const num  = document.getElementById(s.num);
+    card.classList.remove('visible');
+    card.style.opacity = 0;
+    card.style.transform = 'translateY(40px)';
+    num.textContent = s.prefix + '0' + s.suffix;
+  });
+
+  // re-run after brief pause
+  setTimeout(() => {
+    stats.forEach(s => {
+      showCard(document.getElementById(s.card), s.cardDelay);
+      animateCounter(
+        document.getElementById(s.num),
+        s.prefix, s.target, s.suffix,
+        s.duration, s.counterDelay
+      );
+    });
+  }, 100);
+}
+
+// ── Auto-run on load ──────────────────────────────────────────
+window.addEventListener('load', () => {
+  stats.forEach(s => {
+    showCard(document.getElementById(s.card), s.cardDelay);
+    animateCounter(
+      document.getElementById(s.num),
+      s.prefix, s.target, s.suffix,
+      s.duration, s.counterDelay
+    );
+  });
+});
+</script>
+</body>
+</html>
