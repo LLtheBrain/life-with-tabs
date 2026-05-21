@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TABS Clarity Assessment — Life With Tabs™</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --coral:  #D85A30;
+    --olive:  #639922;
+    --brown:  #4A1B0C;
+    --cream:  #F1EFE8;
+    --amber:  #BA7517;
+    --cream2: #FAF8F3;
+    --muted:  #7a5a4a;
+    --border: rgba(74,27,12,0.12);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--cream2);
+    color: var(--brown);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--brown);
+    padding: 0 32px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo { font-size: 15px; font-weight: 800; color: #fff; }
+  .logo span { color: var(--coral); }
+  .header-tag {
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-wrap {
+    background: var(--cream);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 32px;
+    position: sticky;
+    top: 58px;
+    z-index: 90;
+  }
+  .progress-bar-bg {
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--coral), var(--amber));
+    border-radius: 4px;
+    transition: width .5s ease;
+  }
+  .progress-steps {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .progress-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .progress-count {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--coral);
+  }
+
+  /* ── STEP CONTAINER ── */
+  .step { display: none; animation: fadeIn .3s ease; }
+  .step.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .step-wrap {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ── STEP HEADER ── */
+  .step-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--coral);
+    margin-bottom: 8px;
+  }
+  .step-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--brown);
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+  .step-sub {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  /* ── FIELDS ── */
+  .field-group { margin-bottom: 28px; }
+  .field-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--brown);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .field-hint {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 400;
+    margin-left: 4px;
+  }
+  input[type="text"],
+  input[type="email"],
+  textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    color: var(--brown);
+    background: #fff;
+    outline: none;
+    transition: border-color .2s;
+  }
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  textarea:focus { border-color: var(--coral); }
+  textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+
+  /* ── PILL OPTIONS ── */
+  .option-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .option-grid.cols-1 { grid-template-columns: 1fr; }
+  .option-pill {
+    position: relative;
+  }
+  .option-pill input[type="radio"],
+  .option-pill input[type="checkbox"] { display: none; }
+  .option-pill label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--brown);
+    transition: all .2s;
+    line-height: 1.35;
+  }
+  .option-pill label:hover {
+    border-color: var(--coral);
+    background: rgba(216,90,48,0.04);
+  }
+  .option-pill input:checked + label {
+    border-color: var(--coral);
+    background: rgba(216,90,48,0.08);
+    color: var(--coral);
+    font-weight: 600;
+  }
+  .pill-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .pill-check {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    flex-shrink: 0;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: transparent;
+  }
+  .option-pill.square .pill-check { border-radius: 4px; }
+  .option-pill input:checked + label .pill-check {
+    background: var(--coral);
+    border-color: var(--coral);
+    color: #fff;
+  }
+
+  /* ── CAPACITY BUTTONS ── */
+  .cap-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .cap-btn {
+    padding: 20px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    text-align: center;
+    transition: all .2s;
+  }
+  .cap-btn:hover { border-color: var(--coral); background: rgba(216,90,48,0.04); }
+  .cap-btn.selected { border-color: var(--coral); background: rgba(216,90,48,0.08); }
+  .cap-num {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--brown);
+    margin-bottom: 4px;
+  }
+  .cap-btn.selected .cap-num { color: var(--coral); }
+  .cap-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  /* ── NAV BUTTONS ── */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 36px;
+    gap: 12px;
+  }
+  .btn-back {
+    padding: 11px 20px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .btn-back:hover { border-color: var(--brown); color: var(--brown); }
+  .btn-next {
+    padding: 13px 28px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, var(--coral), var(--amber));
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    transition: all .2s;
+    flex: 1;
+    max-width: 260px;
+  }
+  .btn-next:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(216,90,48,0.3); }
+
+  /* ── INTRO CARD ── */
+  .intro-card {
+    background: linear-gradient(135deg, var(--brown) 0%, #2a0e06 100%);
+    border-radius: 18px;
+    padding: 32px;
+    color: #fff;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .intro-card::after {
+    content: 'TABS™';
+    position: absolute;
+    right: -10px;
+    bottom: -20px;
+    font-size: 72px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.04);
+    letter-spacing: -2px;
+  }
+  .intro-card h2 {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #fff;
+  }
+  .intro-card p {
+    font-size: 13px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.7);
+  }
+  .intro-tag {
+    display: inline-block;
+    background: rgba(216,90,48,0.3);
+    color: var(--coral);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .time-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 600;
+    margin-top: 16px;
+  }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 28px 0;
+  }
+
+  /* ── SUCCESS SCREEN ── */
+  .success-screen {
+    display: none;
+    max-width: 560px;
+    margin: 60px auto;
+    padding: 24px;
+    text-align: center;
+  }
+  .success-icon {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: rgba(99,153,34,0.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    margin: 0 auto 20px;
+  }
+  .success-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--brown);
+    margin-bottom: 10px;
+  }
+  .success-sub {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 28px;
+  }
+  .success-steps {
+    background: var(--cream);
+    border-radius: 14px;
+    padding: 20px 24px;
+    border: 1px solid var(--border);
+    text-align: left;
+    margin-bottom: 24px;
+  }
+  .success-steps h4 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .next-step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .next-step:last-child { margin-bottom: 0; }
+  .step-num {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--brown);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-num.active { background: var(--coral); }
+  .step-detail strong {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--brown);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .step-detail span {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .book-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--coral);
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 14px 28px;
+    border-radius: 12px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all .2s;
+    margin-bottom: 16px;
+  }
+  .book-btn:hover { background: #c24f28; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(216,90,48,0.3); }
+  .book-note {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<!-- Hidden Netlify form (bot detection) -->
+<form name="tabs-assessment" netlify netlify-honeypot="bot-field" hidden>
+  <input name="bot-field">
+  <input name="clientName">
+  <input name="clientEmail">
+  <input name="primaryChallenges">
+  <input name="decisionStyle">
+  <input name="taskInitiation">
+  <input name="execStyle">
+  <input name="strengths">
+  <input name="projectCapacity">
+  <input name="peakFocus">
+  <input name="energyPattern">
+  <input name="energyDrains">
+  <input name="consistency">
+  <input name="consistencyHelp">
+  <input name="practitionerLink">
+</form>
+
+<header class="header">
+  <div class="logo">Life With <span>Tabs</span>™</div>
+  <div class="header-tag">TABS Clarity Assessment</div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progressBar" style="width:16.6%"></div>
+  </div>
+  <div class="progress-steps">
+    <div class="progress-label" id="progressLabel">Step 1 of 6 — Welcome</div>
+    <div class="progress-count" id="progressCount">16%</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<!-- STEP 1: Welcome + Client Info           -->
+<!-- ════════════════════════════════════════ -->
+<div class="step active" id="step-1">
+  <div class="step-wrap">
+
+    <div class="intro-card">
+      <div class="intro-tag">Before Your Session</div>
+      <h2>Let's get to know how your brain works.</h2>
+      <p>This isn't a test — there are no wrong answers. Everything you share here helps the Life with Tabs team build your personalized TABS system before you even get on the call. The more honest you are, the better your dashboard will be built for you.</p>
+      <div class="time-badge">⏱ Takes about 5–8 minutes</div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">What's your name? <span class="field-hint">First name is fine</span></label>
+      <input type="text" id="a-name" placeholder="Your name" autocomplete="given-name">
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Your email <span class="field-hint">So we can connect this to your session</span></label>
+      <input type="email" id="a-email" placeholder="you@email.com" autocomplete="email">
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">How would you describe what you do? <span class="field-hint">In your own words</span></label>
+      <input type="text" id="a-role" placeholder="e.g. I run a creative agency, I'm a coach, I freelance…">
+    </div>
+
+    <div class="nav-row">
+      <div></div>
+      <button class="btn-next" onclick="goTo(2)">Let's go →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<!-- STEP 2: Challenges                      -->
+<!-- ════════════════════════════════════════ -->
+<div class="step" id="step-2">
+  <div class="step-wrap">
+    <div class="step-eyebrow">Section 1 of 5</div>
+    <div class="step-title">What feels hardest for you?</div>
+    <div class="step-sub">Check everything that resonates — even a little. This is how we figure out what your system needs to solve first.</div>
+
+    <div class="field-group">
+      <div class="option-grid">
+        <div class="option-pill square">
+          <input type="checkbox" id="ch-initiation" value="Task initiation">
+          <label for="ch-initiation"><div class="pill-check">✓</div> Getting started on tasks</label>
+        </div>
+        <div class="option-pill square">
+          <input type="checkbox" id="ch-time" value="Time blindness">
+          <label for="ch-time"><div class="pill-check">✓</div> Losing track of time</label>
+        </div>
+        <div class="option-pill square">
+          <input type="checkbox" id="ch-hyper" value="Hyperfocus drift">
+          <label for="ch-hyper"><div class="pill-check">✓</div> Can't stop one thing to do another</label>
+        </div>
+        <div class="option-pill square">
+          <input type="checkbox" id="ch-decision" value="Decision paralysis">
+          <label for="ch-decision"><div class="pill-check">✓</div> Making decisions</label>
+        </div>
+        <div class="option-pill square">
+          <input type="checkbox" id="ch-followthrough" value="Follow-through">
+          <label for="ch-followthrough"><div class="pill-check">✓</div> Following through on things I start</label>
+        </div>
+        <div class="option-pill square">
+          <input type="checkbox" id="ch-emotion" value="Emotional regulation">
+          <label for="ch-emotion"><div class="pill-check">✓</div> Managing emotions around work</label>
+        </div>
+        <div class="option-pill square">
+          <input type="checkbox" id="ch-memory" value="Working memory">
+          <label for="ch-memory"><div class="pill-check">✓</div> Forgetting things mid-task</label>
+        </div>
+        <div class="option-pill square">
+          <input type="checkbox" id="ch-transition" value="Task transitions">
+          <label for="ch-transition"><div class="pill-check">✓</div> Switching between tasks</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-back" onclick="goTo(1)">← Back</button>
+      <button class="btn-next" onclick="goTo(3)">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<!-- STEP 3: Decisions + Execution           -->
+<!-- ════════════════════════════════════════ -->
+<div class="step" id="step-3">
+  <div class="step-wrap">
+    <div class="step-eyebrow">Section 2 of 5</div>
+    <div class="step-title">How you decide and execute</div>
+    <div class="step-sub">These patterns are how we'll teach your AI what to expect from you — so it actually helps instead of adding to the noise.</div>
+
+    <div class="field-group">
+      <label class="field-label">When you need to choose what to work on, you usually pick based on…</label>
+      <div class="option-grid">
+        <div class="option-pill">
+          <input type="radio" name="a-decision" id="d-urgency" value="Urgency-based">
+          <label for="d-urgency"><div class="pill-check"></div> What's most urgent or due soon</label>
+        </div>
+        <div class="option-pill">
+          <input type="radio" name="a-decision" id="d-easy" value="Easiest first">
+          <label for="d-easy"><div class="pill-check"></div> Whatever feels easiest to start</label>
+        </div>
+        <div class="option-pill">
+          <input type="radio" name="a-decision" id="d-interest" value="Interest-driven">
+          <label for="d-interest"><div class="pill-check"></div> What I'm most interested in right now</label>
+        </div>
+        <div class="option-pill">
+          <input type="radio" name="a-decision" id="d-reactive" value="Reactive">
+          <label for="d-reactive"><div class="pill-check"></div> Whatever's in front of me — I react</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="field-group">
+      <label class="field-label">How hard is it to actually start a task — even one you want to do?</label>
+      <div class="option-grid">
+        <div class="option-pill">
+          <input type="radio" name="a-initiation" id="i-easy" value="Easy">
+          <label for="i-easy"><div class="pill-check"></div> Pretty easy — I just start</label>
+        </div>
+        <div class="option-pill">
+          <input type="radio" name="a-initiation" id="i-sometimes" value="Sometimes hard">
+          <label for="i-sometimes"><div class="pill-check"></div> Sometimes hard, depends on the day</label>
+        </div>
+        <div class="option-pill">
+          <input type="radio" name="a-initiation" id="i-hard" value="Very hard">
+          <label for="i-hard"><div class="pill-check"></div> Very hard — starting is my biggest block</label>
+        </div>
+        <div class="option-pill">
+          <input type="radio" name="a-initiation" id="i-task" value="Task-dependent">
+          <label for="i-task"><div class="pill-check"></div> Depends entirely on the task</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="field-group">
+      <label class="field-label">Once you're in a task, what usually happens?</label>
+      <div class="option-grid">
+        <div class="option-pill">
+          <input type="radio" name="a-execstyle" id="e-focused" value="Stays focused and finishes">
+          <label for="e-focused"><div class="pill-check"></div> I stay focused and finish it</label>
+        </div>
+        <div class="option-pill">
+          <input type="radio" name="a-execstyle" id="e-loses" value="Starts strong, loses momentum">
+          <label for="e-loses"><div class="pill-check"></div> I start strong, then lose steam</label>
+        </div>
+        <div class="option-pill">
+          <input type="radio" name="a-execstyle" id="e-distracted" value="Gets distracted and switches">
+          <label for="e-distracted"><div class="pill-check"></div> I get distracted and switch tasks</label>
+        </div>
+        <div class="option-pill">
+          <input type="radio" name="a-execstyle" id="e-stuck" value="Gets stuck partway through">
+          <label for="e-stuck"><div class="pill-check"></div> I get stuck halfway and stall</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-back" onclick="goTo(2)">← Back</button>
+      <button class="btn-next" onclick="goTo(4)">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<!-- STEP 4: Strengths + Capacity            -->
+<!-- ════════════════════════════════════════ -->
+<div class="step" id="step-4">
+  <div class="step-wrap">
+    <div class="step-eyebrow">Section 3 of 5</div>
+    <div class="step-title">What you bring to the table</div>
+    <div class="step-sub">Your system should be built around your strengths, not just your struggles. Check everything that feels like you — even if it shows up inconsistently.</div>
+
+    <div class="field-group">
+      <label class="field-label">What do you naturally do well?</label>
+      <div class="option-grid">
+        <div class="option-pill square">
+          <input type="checkbox" id="str-creative" value="Creative problem solving">
+          <label for="str-creative"><div class="pill-check">✓</div> Creative problem solving</label>
+        </div>
+        <div class="option-pill square">
+          <input type="checkbox" id="str-bigpic" value="Big-picture thinking">
+          <label for="str-bigpic"><div class="pill-check">✓</div> Big-picture thinking</label>
+        </div>
+        <div class="option-pill square">
+          <input type="checkbox" id="str-hyperfocus" value="Hyperfocus when it matters">
+          <label for="str-hyperfocus"><div class="pill-check">✓</div> Hyperfocus (when it works for me)</label>
+        </div>
+        <div class="option-pill square">
+          <input type="checkbox" id="str-ideas" value="Connecting ideas quickly">
+          <label for="str-ideas"><div class="pill-check">✓</div> Connecting ideas quickly</label>
+        </div>
+        <div class="option-pill square">
+          <input type="checkbox" id="str-empathy" value="Deep empathy">
+          <label for="str-empathy"><div class="pill-check">✓</div> Deep empathy</label>
+        </div>
+        <div class="option-pill square">
+          <input type="checkbox" id="str-resilience" value="Resilience">
+          <label for="str-resilience"><div class="pill-check">✓</div> Resilience — I bounce back</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="field-group">
+      <label class="field-label">How many active projects can you realistically handle at once? <span class="field-hint">Be honest — this shapes your system</span></label>
+      <div class="cap-grid">
+        <div class="cap-btn" id="cap-1" onclick="selectCapacity(1)">
+          <div class="cap-num">1</div>
+          <div class="cap-label">One thing<br>at a time</div>
+        </div>
+        <div class="cap-btn selected" id="cap-2" onclick="selectCapacity(2)">
+          <div class="cap-num">2</div>
+          <div class="cap-label">Two feels<br>manageable</div>
+        </div>
+        <div class="cap-btn" id="cap-3" onclick="selectCapacity(3)">
+          <div class="cap-num">3</div>
+          <div class="cap-label">Three is<br>my limit</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-back" onclick="goTo(3)">← Back</button>
+      <button class="btn-next" onclick="goTo(5)">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<!-- STEP 5: Energy + Focus                  -->
+<!-- ════════════════════════════════════════ -->
+<div class="step" id="step-5">
+  <div class="step-wrap">
+    <div class="step-eyebrow">Section 4 of 5</div>
+    <div class="step-title">Your energy and focus patterns</div>
+    <div class="step-sub">This is how we make sure your system works with your brain's natural rhythm — not against it.</div>
+
+    <div class="field-group">
+      <label class="field-label">When is your brain sharpest? <span class="field-hint">When you do your best thinking</span></label>
+      <div class="option-grid">
+        <div class="option-pill">
+          <input type="radio" name="a-peakfocus" id="pk-morning" value="Morning">
+          <label for="pk-morning"><span class="pill-icon">🌅</span> Morning</label>
+        </div>
+        <div class="option-pill">
+          <input type="radio" name="a-peakfocus" id="pk-midday" value="Midday">
+          <label for="pk-midday"><span class="pill-icon">☀️</span> Midday</label>
+        </div>
+        <div class="option-pill">
+          <input type="radio" name="a-peakfocus" id="pk-evening" value="Evening">
+          <label for="pk-evening"><span class="pill-icon">🌙</span> Evening</label>
+        </div>
+        <div class="option-pill">
+          <input type="radio" name="a-peakfocus" id="pk-variable" value="Variable">
+          <label for="pk-variable"><span class="pill-icon">🔀</span> Changes — no real pattern</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="field-group">
+      <label class="field-label">How does your energy usually move throughout the day?</label>
+      <div class="option-grid">
+        <div class="option-pill">
+          <input type="radio" name="a-energy" id="ep-consistent" value="Consistent">
+          <label for="ep-consistent"><div class="pill-check"></div> Pretty steady and consistent</label>
+        </div>
+        <div class="option-pill">
+          <input type="radio" name="a-energy" id="ep-updown" value="Up and down">
+          <label for="ep-updown"><div class="pill-check"></div> Goes up and down throughout the day</label>
+        </div>
+        <div class="option-pill">
+          <input type="radio" name="a-energy" id="ep-bursts" value="Short bursts">
+          <label for="ep-bursts"><div class="pill-check"></div> Short intense bursts, then drops</label>
+        </div>
+        <div class="option-pill">
+          <input type="radio" name="a-energy" id="ep-task" value="Task-dependent">
+          <label for="ep-task"><div class="pill-check"></div> Depends entirely on what I'm doing</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="field-group">
+      <label class="field-label">What drains your energy most? <span class="field-hint">Think: what leaves you depleted after doing it</span></label>
+      <textarea id="a-drains" placeholder="e.g. back-to-back meetings, admin tasks, decisions without clear criteria…"></textarea>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-back" onclick="goTo(4)">← Back</button>
+      <button class="btn-next" onclick="goTo(6)">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<!-- STEP 6: Consistency + Submit            -->
+<!-- ════════════════════════════════════════ -->
+<div class="step" id="step-6">
+  <div class="step-wrap">
+    <div class="step-eyebrow">Section 5 of 5</div>
+    <div class="step-title">Follow-through and consistency</div>
+    <div class="step-sub">This is the one most people skip — don't. How you follow through is how we know what guardrails your system needs to have built in.</div>
+
+    <div class="field-group">
+      <label class="field-label">How would you describe your consistency with commitments to yourself?</label>
+      <div class="option-grid cols-1">
+        <div class="option-pill">
+          <input type="radio" name="a-consistency" id="con-strong" value="Consistent">
+          <label for="con-strong"><div class="pill-check"></div> Generally consistent — I follow through most of the time</label>
+        </div>
+        <div class="option-pill">
+          <input type="radio" name="a-consistency" id="con-short" value="Short-term consistent">
+          <label for="con-short"><div class="pill-check"></div> Strong short-term, then it falls off</label>
+        </div>
+        <div class="option-pill">
+          <input type="radio" name="a-consistency" id="con-struggle" value="Struggles with consistency">
+          <label for="con-struggle"><div class="pill-check"></div> I really struggle to stay consistent</label>
+        </div>
+        <div class="option-pill">
+          <input type="radio" name="a-consistency" id="con-task" value="Task-dependent">
+          <label for="con-task"><div class="pill-check"></div> Completely depends on the type of task</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="field-group">
+      <label class="field-label">What helps you stay on track? <span class="field-hint">Even if it's inconsistent — what works when it works?</span></label>
+      <textarea id="a-consistency-help" placeholder="e.g. accountability, visual reminders, momentum from small wins, having a plan written down…"></textarea>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-back" onclick="goTo(5)">← Back</button>
+      <button class="btn-next" onclick="submitAssessment()" style="background:linear-gradient(135deg,#639922,#4a7a18);">✓ Submit My Assessment</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<!-- SUCCESS SCREEN                          -->
+<!-- ════════════════════════════════════════ -->
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">✓</div>
+  <div class="success-title">Assessment received, <span id="successName">friend</span>.</div>
+  <div class="success-sub">The Life with Tabs team has your answers. Your next step is to book your session — everything you just shared will be reviewed before your call so your time together is fully focused on building your system.</div>
+
+  <div class="success-steps">
+    <h4>What happens next</h4>
+
+    <div class="next-step">
+      <div class="step-num active">1</div>
+      <div class="step-detail">
+        <strong>Book your TABS Clarity Session</strong>
+        <span>Select a date at least 48 hours out — this gives the team time to review your assessment and prepare your dashboard before you arrive.</span>
+      </div>
+    </div>
+
+    <div class="next-step">
+      <div class="step-num">2</div>
+      <div class="step-detail">
+        <strong>Your assessment gets reviewed</strong>
+        <span>The Life with Tabs team will go through your answers and begin structuring your personalized TABS system in advance.</span>
+      </div>
+    </div>
+
+    <div class="next-step">
+      <div class="step-num">3</div>
+      <div class="step-detail">
+        <strong>Show up ready to build</strong>
+        <span>Your session is a working call — not an intake. You'll leave with a fully built dashboard and a system you can use the same day.</span>
+      </div>
+    </div>
+  </div>
+
+  <a class="book-btn" id="bookingLink" href="YOUR_GHL_BOOKING_LINK" target="_blank">
+    📅 Book Your Session →
+  </a>
+
+  <div class="book-note">
+    A confirmation email will be sent to you with your booking details.<br>
+    Questions before your session? Reply to that email.
+  </div>
+</div>
+
+<script>
+  let currentStep = 1;
+  const totalSteps = 6;
+  let selectedCapacity = 2;
+
+  const stepLabels = [
+    'Welcome',
+    'Your Challenges',
+    'Decisions + Execution',
+    'Strengths + Capacity',
+    'Energy + Focus',
+    'Consistency'
+  ];
+
+  function goTo(n) {
+    if (n < 1 || n > totalSteps) return;
+    // Validate before advancing forward
+    if (n > currentStep && !validateStep(currentStep)) return;
+    clearErrors();
+    document.getElementById(`step-${currentStep}`).classList.remove('active');
+    currentStep = n;
+    document.getElementById(`step-${currentStep}`).classList.add('active');
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── VALIDATION ──
+  function validateStep(step) {
+    clearErrors();
+    switch(step) {
+      case 1: {
+        const name = document.getElementById('a-name').value.trim();
+        const email = document.getElementById('a-email').value.trim();
+        const role = document.getElementById('a-role').value.trim();
+        let ok = true;
+        if (!name) { showError('a-name', 'Please enter your name.'); ok = false; }
+        if (!email || !email.includes('@')) { showError('a-email', 'Please enter a valid email address.'); ok = false; }
+        if (!role) { showError('a-role', 'Please describe what you do — this helps us prepare for your session.'); ok = false; }
+        return ok;
+      }
+      case 2: {
+        const any = ['ch-initiation','ch-time','ch-hyper','ch-decision','ch-followthrough','ch-emotion','ch-memory','ch-transition']
+          .some(id => document.getElementById(id)?.checked);
+        if (!any) { showGroupError('step-2', 'Please select at least one challenge.'); return false; }
+        return true;
+      }
+      case 3: {
+        let ok = true;
+        if (!document.querySelector('input[name="a-decision"]:checked')) {
+          showGroupError('step-3', 'Please answer all three questions on this page.', 'a-decision'); ok = false;
+        }
+        if (!document.querySelector('input[name="a-initiation"]:checked')) {
+          showGroupError('step-3', 'Please answer all three questions on this page.', 'a-initiation'); ok = false;
+        }
+        if (!document.querySelector('input[name="a-execstyle"]:checked')) {
+          showGroupError('step-3', 'Please answer all three questions on this page.', 'a-execstyle'); ok = false;
+        }
+        return ok;
+      }
+      case 4: {
+        const anyStr = ['str-creative','str-bigpic','str-hyperfocus','str-ideas','str-empathy','str-resilience']
+          .some(id => document.getElementById(id)?.checked);
+        if (!anyStr) { showGroupError('step-4', 'Please select at least one strength.'); return false; }
+        return true;
+      }
+      case 5: {
+        let ok = true;
+        if (!document.querySelector('input[name="a-peakfocus"]:checked')) {
+          showGroupError('step-5', 'Please answer all questions on this page.', 'a-peakfocus'); ok = false;
+        }
+        if (!document.querySelector('input[name="a-energy"]:checked')) {
+          showGroupError('step-5', 'Please answer all questions on this page.', 'a-energy'); ok = false;
+        }
+        const drains = document.getElementById('a-drains').value.trim();
+        if (!drains) { showError('a-drains', 'Please share what drains your energy — this shapes how your containers are structured.'); ok = false; }
+        return ok;
+      }
+      case 6: {
+        let ok = true;
+        if (!document.querySelector('input[name="a-consistency"]:checked')) {
+          showGroupError('step-6', 'Please select how you would describe your consistency.', 'a-consistency'); ok = false;
+        }
+        const help = document.getElementById('a-consistency-help').value.trim();
+        if (!help) { showError('a-consistency-help', 'Please share what helps you stay on track — even a small answer is useful.'); ok = false; }
+        return ok;
+      }
+    }
+    return true;
+  }
+
+  function showError(inputId, message) {
+    const el = document.getElementById(inputId);
+    if (!el) return;
+    el.style.borderColor = 'var(--coral)';
+    let err = document.createElement('div');
+    err.className = 'field-error';
+    err.style.cssText = 'color:var(--coral);font-size:11px;font-weight:600;margin-top:5px;';
+    err.textContent = '⚠ ' + message;
+    el.parentNode.appendChild(err);
+    el.focus();
+  }
+
+  function showGroupError(stepId, message, radioName) {
+    const step = document.getElementById(stepId);
+    if (!step) return;
+    // Find the right field-group to attach the error to
+    let target = step.querySelector('.step-wrap');
+    if (radioName) {
+      const radio = step.querySelector(`input[name="${radioName}"]`);
+      if (radio) target = radio.closest('.field-group') || target;
+    }
+    // Only add if not already there
+    if (target && !target.querySelector('.field-error')) {
+      let err = document.createElement('div');
+      err.className = 'field-error';
+      err.style.cssText = 'color:var(--coral);font-size:11px;font-weight:600;margin-top:8px;padding:8px 12px;background:rgba(216,90,48,0.08);border-radius:8px;border:1px solid rgba(216,90,48,0.2);';
+      err.textContent = '⚠ ' + message;
+      target.appendChild(err);
+    }
+    // Scroll to first error
+    const firstErr = step.querySelector('.field-error');
+    if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function clearErrors() {
+    document.querySelectorAll('.field-error').forEach(el => el.remove());
+    document.querySelectorAll('input[type="text"], input[type="email"], textarea').forEach(el => {
+      if (el.style.borderColor === 'var(--coral)' || el.style.borderColor === 'rgb(216, 90, 48)') {
+        el.style.borderColor = '';
+      }
+    });
+  }
+
+  function updateProgress() {
+    const pct = Math.round((currentStep / totalSteps) * 100);
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = `Step ${currentStep} of ${totalSteps} — ${stepLabels[currentStep - 1]}`;
+    document.getElementById('progressCount').textContent = pct + '%';
+  }
+
+  function selectCapacity(n) {
+    selectedCapacity = n;
+    [1, 2, 3].forEach(i => {
+      document.getElementById(`cap-${i}`).classList.toggle('selected', i === n);
+    });
+  }
+
+  function getChecked(ids) {
+    return ids
+      .map(id => document.getElementById(id))
+      .filter(el => el && el.checked)
+      .map(el => el.value);
+  }
+
+  function collectAnswers() {
+    return {
+      clientName: document.getElementById('a-name').value.trim() || 'Client',
+      clientEmail: document.getElementById('a-email').value.trim(),
+      clientRole: document.getElementById('a-role').value.trim(),
+      primaryChallenges: getChecked(['ch-initiation','ch-time','ch-hyper','ch-decision','ch-followthrough','ch-emotion','ch-memory','ch-transition']),
+      decisionStyle: document.querySelector('input[name="a-decision"]:checked')?.value || '',
+      taskInitiation: document.querySelector('input[name="a-initiation"]:checked')?.value || '',
+      execStyle: document.querySelector('input[name="a-execstyle"]:checked')?.value || '',
+      strengths: getChecked(['str-creative','str-bigpic','str-hyperfocus','str-ideas','str-empathy','str-resilience']),
+      projectCapacity: selectedCapacity,
+      peakFocus: document.querySelector('input[name="a-peakfocus"]:checked')?.value || '',
+      energyPattern: document.querySelector('input[name="a-energy"]:checked')?.value || '',
+      energyDrains: document.getElementById('a-drains').value.trim(),
+      consistency: document.querySelector('input[name="a-consistency"]:checked')?.value || '',
+      consistencyHelp: document.getElementById('a-consistency-help').value.trim(),
+    };
+  }
+
+  async function submitAssessment() {
+    if (!validateStep(6)) return;
+    const answers = collectAnswers();
+
+    // Encode answers into a URL-safe base64 string for the practitioner link
+    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(answers))));
+
+    // Build the practitioner pre-fill link
+    // In production this will be your Netlify domain
+    const base = window.location.origin + '/';
+    const practitionerLink = `${base}lwt-practitioner.html#assess=${encoded}`;
+
+    // Submit to Netlify Forms
+    try {
+      const params = new URLSearchParams();
+      params.append('form-name', 'tabs-assessment');
+      params.append('bot-field', ''); // honeypot must be empty
+      params.append('clientName', answers.clientName);
+      params.append('clientEmail', answers.clientEmail);
+      params.append('primaryChallenges', answers.primaryChallenges.join(', '));
+      params.append('decisionStyle', answers.decisionStyle);
+      params.append('taskInitiation', answers.taskInitiation);
+      params.append('execStyle', answers.execStyle);
+      params.append('strengths', answers.strengths.join(', '));
+      params.append('projectCapacity', answers.projectCapacity);
+      params.append('peakFocus', answers.peakFocus);
+      params.append('energyPattern', answers.energyPattern);
+      params.append('energyDrains', answers.energyDrains);
+      params.append('consistency', answers.consistency);
+      params.append('consistencyHelp', answers.consistencyHelp);
+      params.append('practitionerLink', practitionerLink);
+
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString()
+      });
+    } catch (e) {
+      // Fail silently — still show success to client
+      console.warn('Form submission error:', e);
+    }
+
+    // Hide all steps + progress, show success
+    document.querySelector('.progress-wrap').style.display = 'none';
+    for (let i = 1; i <= totalSteps; i++) {
+      const s = document.getElementById(`step-${i}`);
+      if (s) s.style.display = 'none';
+    }
+    document.getElementById('successName').textContent = answers.clientName.split(' ')[0];
+    document.getElementById('successScreen').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
