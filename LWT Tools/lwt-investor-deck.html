@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life With Tabs™ — Investor Overview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Serif+Display:ital@0;1&family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:#111111;font-family:'DM Sans',sans-serif;}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.035) 1px,transparent 1px);background-size:38px 38px;pointer-events:none;z-index:0;}
+
+/* ── Slide system ── */
+.slide{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.5s ease;z-index:1;padding:80px 60px;}
+.slide.active{opacity:1;pointer-events:all;}
+
+/* ── Chrome ── */
+.slide-counter{position:fixed;top:26px;right:36px;font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:3px;color:rgba(250,247,242,0.2);z-index:100;}
+.slide-counter em{color:#E8684A;font-style:normal;}
+.brand-mark{position:fixed;top:26px;left:36px;font-family:'Syne',sans-serif;font-weight:800;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(250,247,242,0.25);z-index:100;}
+.brand-mark span{color:#E8684A;}
+.dot-nav{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100;}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.18);cursor:pointer;transition:background 0.3s,transform 0.3s;}
+.dot.active{background:#E8684A;transform:scale(1.4);}
+.arrow-hint{position:fixed;bottom:26px;right:36px;font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,0.12);z-index:100;}
+
+/* ── Common text ── */
+.eyebrow{font-family:'Syne',sans-serif;font-weight:700;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:#E8684A;margin-bottom:14px;}
+.slide-title{font-family:'DM Serif Display',serif;font-size:46px;color:#FAF7F2;line-height:1.15;letter-spacing:-0.5px;margin-bottom:18px;}
+.slide-title em{color:#E8684A;font-style:italic;}
+.slide-sub{font-size:15px;font-weight:300;color:rgba(250,247,242,0.52);line-height:1.72;max-width:540px;}
+
+/* ══════════════════════════════════════
+   SLIDE 1 — OPENING / BRAIN
+══════════════════════════════════════ */
+#s1{flex-direction:row;padding:0;}
+.brain-col{flex:1;display:flex;align-items:center;justify-content:center;position:relative;height:100%;}
+.brain-scene{position:relative;width:420px;height:420px;}
+.brain-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(232,104,74,0.22) 0%,transparent 70%);pointer-events:none;}
+#brain-canvas{position:absolute;inset:0;width:100%;height:100%;}
+.brain-img{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:210px;mix-blend-mode:screen;animation:brainFloat 5s ease-in-out infinite;pointer-events:none;}
+@keyframes brainFloat{0%,100%{transform:translate(-50%,-50%);}50%{transform:translate(-50%,calc(-50% - 9px));}}
+.text-col{flex:1;display:flex;flex-direction:column;justify-content:center;padding:60px 60px 60px 20px;}
+.text-col .slide-title{font-size:50px;}
+.text-col .slide-sub{margin-top:6px;}
+.s1-tag{display:inline-flex;align-items:center;gap:8px;margin-top:28px;padding:8px 16px;background:rgba(232,104,74,0.1);border:1px solid rgba(232,104,74,0.25);border-radius:100px;font-family:'Syne',sans-serif;font-weight:700;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:#E8684A;width:fit-content;}
+
+/* ══════════════════════════════════════
+   SLIDE 2 — THE MARKET / STATS
+══════════════════════════════════════ */
+#s2{text-align:center;}
+.stat-row{display:flex;gap:18px;margin-top:38px;}
+.scard{width:188px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:26px 16px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;overflow:hidden;opacity:0;transform:translateY(38px);}
+.scard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0;}
+.scard.cc::before{background:#E8684A;} .scard.ca::before{background:#D4A843;} .scard.co::before{background:#8B9D6A;} .scard.cr::before{background:rgba(250,247,242,0.4);}
+.snum{font-family:'Syne',sans-serif;font-weight:800;font-size:40px;line-height:1;letter-spacing:-1px;margin-bottom:11px;min-height:44px;display:flex;align-items:center;}
+.scard.cc .snum{color:#E8684A;} .scard.ca .snum{color:#D4A843;} .scard.co .snum{color:#8B9D6A;} .scard.cr .snum{color:#FAF7F2;}
+.sdiv{width:22px;height:1px;background:rgba(255,255,255,0.12);margin:0 auto 11px;}
+.slbl{font-size:11px;font-weight:500;line-height:1.5;color:rgba(250,247,242,0.58);}
+.ssrc{font-size:9px;font-weight:300;color:rgba(250,247,242,0.2);margin-top:9px;font-style:italic;}
+@keyframes cardUp{to{opacity:1;transform:translateY(0);}}
+.scard.go{animation:cardUp 0.65s cubic-bezier(0.22,1,0.36,1) forwards;}
+
+/* ══════════════════════════════════════
+   SLIDE 3 — THE REAL PROBLEM
+══════════════════════════════════════ */
+#s3{text-align:center;}
+#s3 .slide-sub{max-width:640px;margin:0 auto 36px;}
+.prob-cols{display:flex;gap:20px;width:100%;max-width:860px;}
+.prob-col{flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:24px 20px;text-align:left;}
+.prob-col.bad{border-color:rgba(232,104,74,0.18);}
+.prob-col.good{border-color:rgba(139,157,106,0.25);}
+.col-tag{font-family:'Syne',sans-serif;font-weight:700;font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;}
+.prob-col.bad .col-tag{color:rgba(232,104,74,0.65);}
+.prob-col.good .col-tag{color:#8B9D6A;}
+.pitem{display:flex;align-items:flex-start;gap:9px;margin-bottom:12px;font-size:12.5px;font-weight:400;color:rgba(250,247,242,0.62);line-height:1.5;}
+.pitem:last-child{margin-bottom:0;}
+.pdot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:6px;}
+.prob-col.bad .pdot{background:rgba(232,104,74,0.5);}
+.prob-col.good .pdot{background:#8B9D6A;}
+
+/* ══════════════════════════════════════
+   SLIDE 4 — WHY NOTHING WORKS
+══════════════════════════════════════ */
+#s4{text-align:center;}
+.comp-row{display:flex;gap:18px;margin-top:36px;width:100%;max-width:940px;}
+.comp-card{flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:26px 20px;text-align:left;}
+.comp-icon{font-size:22px;margin-bottom:12px;}
+.comp-title{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:#FAF7F2;margin-bottom:5px;}
+.comp-eg{font-size:11px;font-weight:300;color:rgba(250,247,242,0.3);margin-bottom:14px;font-style:italic;}
+.comp-miss{font-size:12px;font-weight:400;color:rgba(250,247,242,0.52);line-height:1.58;margin-bottom:14px;}
+.comp-strike{display:inline-flex;align-items:center;gap:6px;background:rgba(232,104,74,0.08);border:1px solid rgba(232,104,74,0.2);border-radius:8px;padding:6px 10px;font-size:11px;font-weight:600;color:rgba(232,104,74,0.7);}
+.gap-bar{margin-top:36px;background:rgba(232,104,74,0.08);border:1px solid rgba(232,104,74,0.2);border-radius:12px;padding:14px 24px;max-width:940px;width:100%;text-align:center;}
+.gap-bar-text{font-size:13px;font-weight:500;color:rgba(250,247,242,0.65);letter-spacing:0.2px;}
+.gap-bar-text em{color:#E8684A;font-style:normal;font-weight:700;}
+
+/* ══════════════════════════════════════
+   SLIDE 5 — THE THESIS
+══════════════════════════════════════ */
+#s5{text-align:center;}
+.thesis-block{max-width:780px;margin:0 auto;}
+.thesis-q{font-family:'DM Serif Display',serif;font-size:18px;color:rgba(250,247,242,0.4);font-style:italic;margin-bottom:20px;}
+.thesis-stmt{font-family:'DM Serif Display',serif;font-size:52px;color:#FAF7F2;line-height:1.15;letter-spacing:-0.5px;margin-bottom:28px;}
+.thesis-stmt em{color:#E8684A;font-style:italic;}
+.thesis-body{font-size:15px;font-weight:300;color:rgba(250,247,242,0.52);line-height:1.75;max-width:620px;margin:0 auto 40px;}
+.thesis-trio{display:flex;gap:28px;justify-content:center;}
+.trio{text-align:center;}
+.trio-lbl{font-family:'Syne',sans-serif;font-weight:700;font-size:9.5px;letter-spacing:2.5px;text-transform:uppercase;color:#E8684A;margin-bottom:6px;}
+.trio-txt{font-size:12.5px;font-weight:300;color:rgba(250,247,242,0.45);line-height:1.5;}
+
+/* ══════════════════════════════════════
+   SLIDE 6 — THE SYSTEM LEARNS YOU
+══════════════════════════════════════ */
+#s6{text-align:center;}
+.input-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:32px;width:100%;max-width:940px;}
+.itile{background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:18px 15px;text-align:left;opacity:0;transform:translateY(18px);}
+.itile.go{animation:tileIn 0.5s cubic-bezier(0.22,1,0.36,1) forwards;}
+@keyframes tileIn{to{opacity:1;transform:translateY(0);}}
+.tile-icon{font-size:16px;margin-bottom:9px;}
+.tile-lbl{font-family:'Syne',sans-serif;font-weight:700;font-size:9px;letter-spacing:1.8px;text-transform:uppercase;color:#E8684A;margin-bottom:5px;}
+.tile-desc{font-size:11px;font-weight:300;color:rgba(250,247,242,0.48);line-height:1.55;}
+
+/* ══════════════════════════════════════
+   SLIDE 7 — TABS SYSTEM
+══════════════════════════════════════ */
+#s7{text-align:center;}
+.tabs-row{display:flex;gap:15px;margin-top:34px;}
+.tcard{width:186px;background:rgba(255,255,255,0.035);border-radius:14px;padding:26px 17px 22px;display:flex;flex-direction:column;position:relative;overflow:hidden;opacity:0;transform:translateY(48px);}
+.tcard::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;border-radius:14px 0 0 14px;}
+.tcard::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;}
+.tcard.tc::before{background:#E8684A;} .tcard.tc::after{background:linear-gradient(90deg,#E8684A,transparent);}
+.tcard.ta::before{background:#D4A843;} .tcard.ta::after{background:linear-gradient(90deg,#D4A843,transparent);}
+.tcard.tb::before{background:#8B9D6A;} .tcard.tb::after{background:linear-gradient(90deg,#8B9D6A,transparent);}
+.tcard.ts::before{background:rgba(250,247,242,0.5);} .tcard.ts::after{background:linear-gradient(90deg,rgba(250,247,242,0.5),transparent);}
+.tltr{font-family:'Syne',sans-serif;font-weight:800;font-size:58px;line-height:1;letter-spacing:-2px;margin-bottom:4px;}
+.tcard.tc .tltr{color:#E8684A;} .tcard.ta .tltr{color:#D4A843;} .tcard.tb .tltr{color:#8B9D6A;} .tcard.ts .tltr{color:rgba(250,247,242,0.82);}
+.twrd{font-family:'DM Serif Display',serif;font-size:14px;color:#FAF7F2;margin-bottom:11px;}
+.tdiv{width:100%;height:1px;background:rgba(255,255,255,0.08);margin-bottom:11px;}
+.tdesc{font-size:10.5px;font-weight:300;line-height:1.62;color:rgba(250,247,242,0.52);flex:1;}
+.ttag{display:inline-flex;align-items:center;gap:4px;margin-top:13px;padding:4px 9px;border-radius:100px;font-family:'Syne',sans-serif;font-weight:700;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;align-self:flex-start;}
+.tcard.tc .ttag{background:rgba(232,104,74,0.12);color:#E8684A;border:1px solid rgba(232,104,74,0.25);}
+.tcard.ta .ttag{background:rgba(212,168,67,0.12);color:#D4A843;border:1px solid rgba(212,168,67,0.25);}
+.tcard.tb .ttag{background:rgba(139,157,106,0.12);color:#8B9D6A;border:1px solid rgba(139,157,106,0.25);}
+.tcard.ts .ttag{background:rgba(250,247,242,0.07);color:rgba(250,247,242,0.6);border:1px solid rgba(250,247,242,0.15);}
+.tcard.go{animation:cardUp 0.65s cubic-bezier(0.22,1,0.36,1) forwards;}
+
+/* ══════════════════════════════════════
+   SLIDE 8 — THE DASHBOARD
+══════════════════════════════════════ */
+#s8{flex-direction:row;gap:52px;padding:60px;}
+.dash-text{flex:0 0 300px;display:flex;flex-direction:column;justify-content:center;}
+.dash-text .slide-title{font-size:38px;}
+.dash-text .slide-sub{font-size:14px;margin-bottom:24px;}
+.dash-feats{display:flex;flex-direction:column;gap:14px;}
+.dfeat{display:flex;align-items:flex-start;gap:11px;}
+.dfeat-icon{width:28px;height:28px;border-radius:7px;background:rgba(232,104,74,0.1);border:1px solid rgba(232,104,74,0.2);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+.dfeat-txt strong{display:block;font-size:12.5px;font-weight:600;color:#FAF7F2;margin-bottom:2px;}
+.dfeat-txt span{font-size:11px;font-weight:300;color:rgba(250,247,242,0.42);line-height:1.5;}
+.dash-mock-img{flex:1;display:flex;align-items:center;justify-content:center;position:relative;}
+.dash-screenshot{max-height:82vh;max-width:100%;border-radius:12px;box-shadow:0 0 0 1px rgba(255,255,255,0.08),0 24px 60px rgba(0,0,0,0.6);object-fit:contain;}
+
+/* ══════════════════════════════════════
+   SLIDE 9 — ECOSYSTEM
+══════════════════════════════════════ */
+#s9{text-align:center;}
+.eco-wrap{width:880px;height:430px;position:relative;margin-top:14px;}
+
+/* ══════════════════════════════════════
+   SLIDE 10 — BUSINESS MODEL
+══════════════════════════════════════ */
+#s10{text-align:center;}
+.biz-row{display:flex;gap:18px;margin-top:38px;width:100%;max-width:940px;align-items:stretch;}
+.bcard{flex:1;background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:26px 20px;text-align:left;}
+.bcard.featured{border-color:rgba(232,104,74,0.4);background:rgba(232,104,74,0.06);}
+.btag{font-family:'Syne',sans-serif;font-weight:700;font-size:8.5px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(250,247,242,0.28);margin-bottom:11px;}
+.bcard.featured .btag{color:#E8684A;}
+.bprice{font-family:'Syne',sans-serif;font-weight:800;font-size:38px;color:#FAF7F2;letter-spacing:-1px;line-height:1;margin-bottom:4px;}
+.bcard.featured .bprice{color:#E8684A;}
+.bper{font-size:12px;font-weight:300;color:rgba(250,247,242,0.38);margin-bottom:16px;}
+.bdiv{height:1px;background:rgba(255,255,255,0.07);margin-bottom:16px;}
+.bitem{display:flex;align-items:flex-start;gap:8px;margin-bottom:9px;font-size:12px;font-weight:400;color:rgba(250,247,242,0.58);line-height:1.45;}
+.bdot{width:4px;height:4px;border-radius:50%;background:rgba(232,104,74,0.6);flex-shrink:0;margin-top:6px;}
+.bfuture{font-size:11px;font-weight:300;color:rgba(250,247,242,0.28);font-style:italic;margin-top:10px;}
+
+/* ══════════════════════════════════════
+   SLIDE 11 — THE ASK
+══════════════════════════════════════ */
+#s11{text-align:center;position:relative;}
+.ask-title{font-family:'DM Serif Display',serif;font-size:50px;color:#FAF7F2;line-height:1.18;letter-spacing:-0.5px;margin-bottom:22px;max-width:780px;}
+.ask-title em{color:#E8684A;font-style:italic;}
+.ask-sub{font-size:15px;font-weight:300;color:rgba(250,247,242,0.48);line-height:1.75;max-width:540px;margin:0 auto 44px;}
+.ask-contact{font-family:'Syne',sans-serif;font-weight:700;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:rgba(250,247,242,0.28);margin-bottom:9px;}
+.ask-email{font-size:17px;font-weight:300;color:#E8684A;letter-spacing:0.5px;}
+.ask-bg{font-family:'DM Serif Display',serif;font-size:140px;color:rgba(232,104,74,0.04);letter-spacing:-4px;position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);white-space:nowrap;pointer-events:none;z-index:-1;}
+</style>
+</head>
+<body>
+
+<!-- Chrome UI -->
+<div class="brand-mark">Life With <span>Tabs</span>™</div>
+<div class="slide-counter"><em id="cur">01</em> / <span id="tot">11</span></div>
+<div class="dot-nav" id="dotNav"></div>
+<div class="arrow-hint">← → NAVIGATE</div>
+
+<!-- ══════════════════════════════════════
+     SLIDE 1 — OPENING
+══════════════════════════════════════ -->
+<div class="slide active" id="s1">
+  <div class="brain-col">
+    <div class="brain-scene">
+      <div class="brain-glow"></div>
+      <canvas id="brain-canvas"></canvas>
+      <img class="brain-img" src="../brain1.png" alt="brain" id="brain-img">
+    </div>
+  </div>
+  <div class="text-col">
+    <div class="eyebrow">▶ Life With Tabs™</div>
+    <div class="slide-title">Your brain has<br><em>47 tabs open.</em><br>We built the<br>system for that.</div>
+    <div class="slide-sub">A practitioner-built, AI-powered productivity system designed specifically for ADHD entrepreneurs.</div>
+    <div class="s1-tag">⚡ Pilot · $299 / session</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SLIDE 2 — THE MARKET
+══════════════════════════════════════ -->
+<div class="slide" id="s2">
+  <div class="eyebrow">▶ The Market Nobody's Solving For</div>
+  <div class="slide-title">ADHD entrepreneurs are a <em>massive,</em><br>underserved, high-intent market.</div>
+  <div class="slide-sub">Not a single solution was built the right way — until now.</div>
+  <div class="stat-row">
+    <div class="scard cc" id="sc1"><div class="snum" id="sn1">0</div><div class="sdiv"></div><div class="slbl">Adults with ADHD<br>in the United States</div><div class="ssrc">CDC / CHADD estimates</div></div>
+    <div class="scard ca" id="sc2"><div class="snum" id="sn2">0</div><div class="sdiv"></div><div class="slbl">ADHD entrepreneurs<br>actively building</div><div class="ssrc">SBA + ADHD prevalence data</div></div>
+    <div class="scard co" id="sc3"><div class="snum" id="sn3">0</div><div class="sdiv"></div><div class="slbl">More likely to start a business<br>than neurotypical peers</div><div class="ssrc">Journal of Attention Disorders</div></div>
+    <div class="scard cr" id="sc4"><div class="snum" id="sn4">0</div><div class="sdiv"></div><div class="slbl">Estimated lost annually to<br>ADHD productivity gaps</div><div class="ssrc">Workplace ADHD cost estimates</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SLIDE 3 — THE REAL PROBLEM
+══════════════════════════════════════ -->
+<div class="slide" id="s3">
+  <div class="eyebrow">▶ The Real Problem</div>
+  <div class="slide-title">It was never about <em>discipline.</em></div>
+  <div class="slide-sub">Every ADHD brain is different. Most tools were built assuming they're all the same — and that the problem is simply not trying hard enough.</div>
+  <div class="prob-cols">
+    <div class="prob-col bad">
+      <div class="col-tag">✗ What existing tools say</div>
+      <div class="pitem"><div class="pdot"></div>"Just be more organized."</div>
+      <div class="pitem"><div class="pdot"></div>"Use this template — it works for everyone."</div>
+      <div class="pitem"><div class="pdot"></div>"Set more reminders. Make a to-do list."</div>
+      <div class="pitem"><div class="pdot"></div>"If you can't follow through, try harder."</div>
+      <div class="pitem"><div class="pdot"></div>Built for neurotypical workflows, applied to neurodivergent brains.</div>
+    </div>
+    <div class="prob-col good">
+      <div class="col-tag">✓ What ADHD entrepreneurs actually need</div>
+      <div class="pitem"><div class="pdot"></div>To understand exactly how <em>their</em> ADHD shows up.</div>
+      <div class="pitem"><div class="pdot"></div>A system built around their specific patterns — not a generic template.</div>
+      <div class="pitem"><div class="pdot"></div>Tools that work <em>with</em> their brain, not against it.</div>
+      <div class="pitem"><div class="pdot"></div>Structure that grows with them and learns them over time.</div>
+      <div class="pitem"><div class="pdot"></div>A practitioner who has lived it — and built it from the inside.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SLIDE 4 — WHY NOTHING WORKS
+══════════════════════════════════════ -->
+<div class="slide" id="s4">
+  <div class="eyebrow">▶ The Competitive Landscape</div>
+  <div class="slide-title">Every solution <em>misses</em> the same step.</div>
+  <div class="comp-row">
+    <div class="comp-card">
+      <div class="comp-icon">📱</div>
+      <div class="comp-title">Productivity Apps</div>
+      <div class="comp-eg">Notion, Asana, Todoist, Monday</div>
+      <div class="comp-miss">Powerful tools — built entirely for neurotypical workflows. No personalization for how ADHD brains actually process work, time, or decisions.</div>
+      <div class="comp-strike">✗ Skips self-knowledge entirely</div>
+    </div>
+    <div class="comp-card">
+      <div class="comp-icon">🎤</div>
+      <div class="comp-title">ADHD Coaching</div>
+      <div class="comp-eg">Independent coaches, ADHD clinics</div>
+      <div class="comp-miss">High-touch and effective, but expensive, hard to scale, and rarely paired with the right technology to make insights stick day-to-day.</div>
+      <div class="comp-strike">✗ Not scalable · No tech layer</div>
+    </div>
+    <div class="comp-card">
+      <div class="comp-icon">🤖</div>
+      <div class="comp-title">Generic AI Tools</div>
+      <div class="comp-eg">ChatGPT, Gemini, Copilot</div>
+      <div class="comp-miss">Great at answering questions. Not built to know you, learn your patterns, or configure a personalized system around your specific ADHD profile.</div>
+      <div class="comp-strike">✗ No personalization · No system</div>
+    </div>
+  </div>
+  <div class="gap-bar">
+    <div class="gap-bar-text">All three skip the same step: <em>helping you understand how YOUR ADHD specifically shows up first.</em></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SLIDE 5 — THE THESIS
+══════════════════════════════════════ -->
+<div class="slide" id="s5">
+  <div class="eyebrow">▶ The Thesis</div>
+  <div class="thesis-block">
+    <div class="thesis-q">What if the system started with you?</div>
+    <div class="thesis-stmt">No system works until you know<br>how <em>your</em> ADHD shows up.</div>
+    <div class="thesis-body">Before the dashboard. Before the AI. Before the structure — you need a clear picture of your specific patterns: how you focus, how your energy moves, how you make decisions, and what makes you stall. That's where Life With Tabs starts. And nothing else does.</div>
+    <div class="thesis-trio">
+      <div class="trio"><div class="trio-lbl">It knows you</div><div class="trio-txt">Built from your<br>real patterns</div></div>
+      <div class="trio"><div class="trio-lbl">It's built for you</div><div class="trio-txt">Custom dashboard<br>from day one</div></div>
+      <div class="trio"><div class="trio-lbl">It grows with you</div><div class="trio-txt">Learns and adjusts<br>over time</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SLIDE 6 — THE SYSTEM LEARNS YOU
+══════════════════════════════════════ -->
+<div class="slide" id="s6">
+  <div class="eyebrow">▶ Assessment → Personalization</div>
+  <div class="slide-title">The system <em>learns you</em> before it builds anything.</div>
+  <div class="slide-sub" style="margin-bottom:0">Every dashboard is configured from a deep-intake assessment. Here's what it captures:</div>
+  <div class="input-grid">
+    <div class="itile" id="it1"><div class="tile-icon">🌅</div><div class="tile-lbl">Peak Focus Window</div><div class="tile-desc">When your brain is sharpest — morning, midday, evening, or variable</div></div>
+    <div class="itile" id="it2"><div class="tile-icon">⚡</div><div class="tile-lbl">Energy Pattern</div><div class="tile-desc">Whether your energy is steady, cyclical, burst-based, or task-dependent</div></div>
+    <div class="itile" id="it3"><div class="tile-icon">🧭</div><div class="tile-lbl">Decision Style</div><div class="tile-desc">How you choose what to work on — urgency, interest, ease, or reactive</div></div>
+    <div class="itile" id="it4"><div class="tile-icon">🚀</div><div class="tile-lbl">Task Initiation</div><div class="tile-desc">How hard it is to start — from easy to "starting is my biggest block"</div></div>
+    <div class="itile" id="it5"><div class="tile-icon">🔄</div><div class="tile-lbl">Execution Style</div><div class="tile-desc">What happens once you're in a task — focus, drift, hyperfocus, or stall</div></div>
+    <div class="itile" id="it6"><div class="tile-icon">📊</div><div class="tile-lbl">Project Capacity</div><div class="tile-desc">How many active projects your brain can realistically hold at once</div></div>
+    <div class="itile" id="it7"><div class="tile-icon">🔋</div><div class="tile-lbl">Energy Drains</div><div class="tile-desc">Specific activities that deplete you — shapes how containers are structured</div></div>
+    <div class="itile" id="it8"><div class="tile-icon">📌</div><div class="tile-lbl">Consistency Pattern</div><div class="tile-desc">How you follow through and what guardrails your system needs built in</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SLIDE 7 — TABS SYSTEM
+══════════════════════════════════════ -->
+<div class="slide" id="s7">
+  <div class="eyebrow">▶ The System</div>
+  <div class="slide-title">Built for how your brain <em>actually</em> works.</div>
+  <div class="slide-sub">Four pillars. One system. Yours — from day one.</div>
+  <div class="tabs-row">
+    <div class="tcard tc" id="tc1"><div class="tltr">T</div><div class="twrd">Time</div><div class="tdiv"></div><div class="tdesc">Protected focus containers — one project at a time. No rigid schedules. Just work windows that fit how you actually move.</div><div class="ttag">⏱ Time Containers</div></div>
+    <div class="tcard ta" id="tc2"><div class="tltr">A</div><div class="twrd">Anchors</div><div class="tdiv"></div><div class="tdesc">Small, consistent habits that hold your system together — morning check-ins, weekly resets, end-of-day reviews.</div><div class="ttag">⚓ Anchor Routines</div></div>
+    <div class="tcard tb" id="tc3"><div class="tltr">B</div><div class="twrd">Brain Dump</div><div class="tdiv"></div><div class="tdesc">Every idea, task, and worry — out of your head and into a trusted place. The mental clutter clears. The right things get done.</div><div class="ttag">🧠 Capture Everything</div></div>
+    <div class="tcard ts" id="tc4"><div class="tltr">S</div><div class="twrd">Steps</div><div class="tdiv"></div><div class="tdesc">Big projects broken into the next doable action — concrete, specific, sized for a brain that needs momentum to start.</div><div class="ttag">🪜 Next Actions</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SLIDE 8 — THE DASHBOARD
+══════════════════════════════════════ -->
+<div class="slide" id="s8">
+  <div class="dash-text">
+    <div class="eyebrow">▶ The Product</div>
+    <div class="slide-title">Your custom<br>dashboard +<br><em>built-in GPT.</em></div>
+    <div class="slide-sub">Built before you even get on the call. Walk in — walk out with a system you can use the same day.</div>
+    <div class="dash-feats">
+      <div class="dfeat"><div class="dfeat-icon">⚡</div><div class="dfeat-txt"><strong>Configured from your assessment</strong><span>Every block, timer, and priority built from your actual patterns</span></div></div>
+      <div class="dfeat"><div class="dfeat-icon">🤖</div><div class="dfeat-txt"><strong>GPT trained on your system</strong><span>Knows your TABS pillars, your capacity, your anchors</span></div></div>
+      <div class="dfeat"><div class="dfeat-icon">🔄</div><div class="dfeat-txt"><strong>Evolves with you</strong><span>Adjust as your patterns shift — not a static template</span></div></div>
+    </div>
+  </div>
+  <div class="dash-mock-img">
+    <img src="dashboard-top-half.png" alt="TABS Dashboard" class="dash-screenshot">
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SLIDE 9 — THE ECOSYSTEM
+══════════════════════════════════════ -->
+<div class="slide" id="s9">
+  <div class="eyebrow">▶ The LWT Ecosystem</div>
+  <div class="slide-title">One brand. <em>Multiple entry points.</em></div>
+  <div class="eco-wrap">
+    <svg id="eco-svg" viewBox="0 0 880 430" width="880" height="430" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="eglow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="nglow"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <!-- Spokes -->
+      <line class="esp" id="e-tabs"   x1="440" y1="220" x2="640" y2="220" stroke="#E8684A" stroke-width="1.8" opacity="0.7"/>
+      <line class="esp" id="e-yt"     x1="440" y1="220" x2="528" y2="376" stroke="#D4A843" stroke-width="1.5" opacity="0.65"/>
+      <line class="esp" id="e-coffee" x1="440" y1="220" x2="352" y2="376" stroke="#8B9D6A" stroke-width="1.5" opacity="0.65"/>
+      <line class="esp" id="e-speak"  x1="440" y1="220" x2="240" y2="220" stroke="rgba(250,247,242,0.55)" stroke-width="1.5" opacity="0.7"/>
+      <line class="esp" id="e-corp"   x1="440" y1="220" x2="440" y2="38"  stroke="#C0956F" stroke-width="1.5" opacity="0.65"/>
+      <!-- Hub -->
+      <circle cx="440" cy="220" r="52" fill="rgba(232,104,74,0.05)" filter="url(#eglow)"/>
+      <circle cx="440" cy="220" r="42" fill="none" stroke="#E8684A" stroke-width="1" stroke-dasharray="5 3.5" opacity="0.35"/>
+      <circle cx="440" cy="220" r="36" fill="#181818" stroke="#E8684A" stroke-width="2"/>
+      <text x="440" y="211" text-anchor="middle" font-size="15" fill="#E8684A">⚡</text>
+      <text x="440" y="225" text-anchor="middle" font-family="Syne,sans-serif" font-weight="800" font-size="7" fill="#FAF7F2" letter-spacing="1.5">LIFE WITH</text>
+      <text x="440" y="236" text-anchor="middle" font-family="Syne,sans-serif" font-weight="800" font-size="7" fill="#E8684A" letter-spacing="1.5">TABS™</text>
+      <!-- TABS System (right) -->
+      <circle class="enode" cx="640" cy="220" r="36" fill="#181818" stroke="#E8684A" stroke-width="2" filter="url(#nglow)"/>
+      <text x="640" y="213" text-anchor="middle" font-size="14" fill="#E8684A">💻</text>
+      <text x="640" y="227" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="7" fill="#E8684A" letter-spacing="1">TABS</text>
+      <text x="640" y="237" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="7" fill="#E8684A" letter-spacing="1">SYSTEM</text>
+      <text x="686" y="215" font-family="Syne,sans-serif" font-weight="700" font-size="11" fill="#FAF7F2">The TABS System</text>
+      <text x="686" y="230" font-family="DM Sans,sans-serif" font-weight="300" font-size="9.5" fill="rgba(250,247,242,0.45)">Custom dashboard + built-in GPT</text>
+      <text x="686" y="244" font-family="DM Sans,sans-serif" font-weight="500" font-size="9" fill="#E8684A">$299 / session  ·  pilot</text>
+      <!-- YouTube (lower-right) -->
+      <circle class="enode" cx="528" cy="376" r="34" fill="#181818" stroke="#D4A843" stroke-width="2" filter="url(#nglow)"/>
+      <text x="528" y="369" text-anchor="middle" font-size="13" fill="#D4A843">▶</text>
+      <text x="528" y="383" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="7" fill="#D4A843" letter-spacing="1">CONTENT</text>
+      <text x="528" y="420" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="10.5" fill="#FAF7F2">YouTube</text>
+      <!-- CAM's Coffee (lower-left) -->
+      <circle class="enode" cx="352" cy="376" r="34" fill="#181818" stroke="#8B9D6A" stroke-width="2" filter="url(#nglow)"/>
+      <text x="352" y="369" text-anchor="middle" font-size="13" fill="#8B9D6A">☕</text>
+      <text x="352" y="383" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="7" fill="#8B9D6A" letter-spacing="0.8">COFFEE</text>
+      <text x="352" y="420" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="10.5" fill="#FAF7F2">CAM's Coffee Co.</text>
+      <!-- Speaking (left) -->
+      <circle class="enode" cx="240" cy="220" r="34" fill="#181818" stroke="rgba(250,247,242,0.6)" stroke-width="2" filter="url(#nglow)"/>
+      <text x="240" y="213" text-anchor="middle" font-size="13" fill="rgba(250,247,242,0.82)">🎤</text>
+      <text x="240" y="227" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="7" fill="rgba(250,247,242,0.65)" letter-spacing="1">KEYNOTE</text>
+      <text x="194" y="215" text-anchor="end" font-family="Syne,sans-serif" font-weight="700" font-size="10.5" fill="#FAF7F2">Speaking</text>
+      <text x="194" y="229" text-anchor="end" font-family="DM Sans,sans-serif" font-weight="300" font-size="9.5" fill="rgba(250,247,242,0.42)">LWT keynote &amp; workshops</text>
+      <!-- Corporate (top) -->
+      <circle class="enode" cx="440" cy="38" r="34" fill="#181818" stroke="#C0956F" stroke-width="2" filter="url(#nglow)"/>
+      <text x="440" y="31" text-anchor="middle" font-size="13" fill="#C0956F">🏢</text>
+      <text x="440" y="45" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="6.5" fill="#C0956F" letter-spacing="0.8">CORPORATE / B2B</text>
+      <text x="485" y="26" text-anchor="start" font-family="Syne,sans-serif" font-weight="700" font-size="10.5" fill="#FAF7F2">TABS for Inclusive Leadership</text>
+      <text x="485" y="40" text-anchor="start" font-family="DM Sans,sans-serif" font-weight="300" font-size="9.5" fill="rgba(250,247,242,0.42)">HR · DEI · Corporate training  ·  future</text>
+    </svg>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SLIDE 10 — BUSINESS MODEL
+══════════════════════════════════════ -->
+<div class="slide" id="s10">
+  <div class="eyebrow">▶ Business Model</div>
+  <div class="slide-title">Simple to start. <em>Built to scale.</em></div>
+  <div class="biz-row">
+    <div class="bcard featured">
+      <div class="btag">▶ NOW · Pilot</div>
+      <div class="bprice">$299</div>
+      <div class="bper">per session</div>
+      <div class="bdiv"></div>
+      <div class="bitem"><div class="bdot"></div>1:1 TABS Clarity Session with Latasha</div>
+      <div class="bitem"><div class="bdot"></div>Full intake assessment (pre-session)</div>
+      <div class="bitem"><div class="bdot"></div>Custom-built TABS dashboard</div>
+      <div class="bitem"><div class="bdot"></div>GPT pre-configured to your patterns</div>
+      <div class="bitem"><div class="bdot"></div>Leave the call with a working system</div>
+    </div>
+    <div class="bcard">
+      <div class="btag">→ NEXT · Growth</div>
+      <div class="bprice">$599–799</div>
+      <div class="bper">per session / package</div>
+      <div class="bdiv"></div>
+      <div class="bitem"><div class="bdot"></div>Expanded session packages</div>
+      <div class="bitem"><div class="bdot"></div>Follow-up system check-ins</div>
+      <div class="bitem"><div class="bdot"></div>Group cohort options</div>
+      <div class="bitem"><div class="bdot"></div>Certified practitioner licensing</div>
+      <div class="bfuture">Practitioner-led delivery model — scales without Latasha in every session</div>
+    </div>
+    <div class="bcard">
+      <div class="btag">→ FUTURE · Platform</div>
+      <div class="bprice">Platform</div>
+      <div class="bper">subscription + licensing</div>
+      <div class="bdiv"></div>
+      <div class="bitem"><div class="bdot"></div>Proprietary Claude plugins + skills</div>
+      <div class="bitem"><div class="bdot"></div>TABS for Inclusive Leadership (B2B)</div>
+      <div class="bitem"><div class="bdot"></div>HR + DEI corporate training arm</div>
+      <div class="bitem"><div class="bdot"></div>Certified TABS practitioner network</div>
+      <div class="bfuture">From single product to full ecosystem — each revenue stream feeds the next</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SLIDE 11 — THE ASK
+══════════════════════════════════════ -->
+<div class="slide" id="s11">
+  <div class="eyebrow">▶ Life With Tabs™</div>
+  <div class="ask-title">We're building something<br>that has <em>never existed.</em><br>We'd love your thinking.</div>
+  <div class="ask-sub">This isn't a pitch for capital — it's an invitation to shape something real. A practitioner-built, AI-powered system for the millions of ADHD entrepreneurs the world keeps overlooking.</div>
+  <div class="ask-contact">Connect with Latasha</div>
+  <div class="ask-email">latasha@latashalewis.com</div>
+  <div class="ask-bg">TABS™</div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════
+const TOTAL = 11;
+let cur = 1;
+let animatedSlides = new Set();
+
+const dotNav = document.getElementById('dotNav');
+for(let i=1;i<=TOTAL;i++){
+  const d=document.createElement('div');
+  d.className='dot'+(i===1?' active':'');
+  d.onclick=()=>goTo(i);
+  dotNav.appendChild(d);
+}
+
+function goTo(n){
+  if(n<1||n>TOTAL)return;
+  document.getElementById('s'+cur).classList.remove('active');
+  document.querySelectorAll('.dot')[cur-1].classList.remove('active');
+  cur=n;
+  document.getElementById('s'+cur).classList.add('active');
+  document.querySelectorAll('.dot')[cur-1].classList.add('active');
+  document.getElementById('cur').textContent=String(cur).padStart(2,'0');
+  if(!animatedSlides.has(cur)){
+    animatedSlides.add(cur);
+    initSlide(cur);
+  }
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') goTo(cur+1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') goTo(cur-1);
+});
+
+// Click to advance (avoid clicking on interactive elements)
+document.addEventListener('click',e=>{
+  if(e.target.closest('.dot')||e.target.closest('button')||e.target.closest('a'))return;
+  goTo(cur+1);
+});
+
+// ══════════════════════════════════════
+// SLIDE INIT ROUTER
+// ══════════════════════════════════════
+function initSlide(n){
+  if(n===1) initBrain();
+  if(n===2) initStats();
+  if(n===6) initTiles();
+  if(n===7) initTabs();
+}
+
+// Auto-init slide 1
+animatedSlides.add(1);
+initSlide(1);
+
+// ══════════════════════════════════════
+// SLIDE 1 — BRAIN ANIMATION
+// ══════════════════════════════════════
+function initBrain(){
+  const canvas=document.getElementById('brain-canvas');
+  const ctx=canvas.getContext('2d');
+  const W=canvas.offsetWidth, H=canvas.offsetHeight;
+  canvas.width=W; canvas.height=H;
+  const cx=W/2, cy=H/2;
+
+  const words=[
+    {t:'power', txt:'IDEAS',   font:'800 15px Syne',      col:'rgba(232,104,74,0.85)'},
+    {t:'power', txt:'FOCUS',   font:'800 13px Syne',      col:'rgba(232,104,74,0.75)'},
+    {t:'power', txt:'BUILD',   font:'800 14px Syne',      col:'rgba(232,104,74,0.8)'},
+    {t:'power', txt:'CREATE',  font:'800 12px Syne',      col:'rgba(212,168,67,0.8)'},
+    {t:'power', txt:'VISION',  font:'800 13px Syne',      col:'rgba(232,104,74,0.7)'},
+    {t:'power', txt:'ENERGY',  font:'800 11px Syne',      col:'rgba(212,168,67,0.72)'},
+    {t:'task',  txt:'brain dump',  font:'400 11px Space Mono', col:'rgba(139,157,106,0.7)'},
+    {t:'task',  txt:'deep work',   font:'400 10px Space Mono', col:'rgba(139,157,106,0.65)'},
+    {t:'task',  txt:'anchor',      font:'400 10px Space Mono', col:'rgba(139,157,106,0.6)'},
+    {t:'task',  txt:'09:00',       font:'700 11px Space Mono', col:'rgba(212,168,67,0.6)'},
+    {t:'task',  txt:'steps',       font:'400 10px Space Mono', col:'rgba(139,157,106,0.55)'},
+    {t:'soft',  txt:'clarity',     font:'italic 13px "DM Serif Display"', col:'rgba(250,247,242,0.5)'},
+    {t:'soft',  txt:'momentum',    font:'italic 12px "DM Serif Display"', col:'rgba(250,247,242,0.45)'},
+    {t:'soft',  txt:'flow',        font:'italic 14px "DM Serif Display"', col:'rgba(250,247,242,0.55)'},
+    {t:'soft',  txt:'purpose',     font:'italic 11px "DM Serif Display"', col:'rgba(250,247,242,0.4)'},
+    {t:'soft',  txt:'reset',       font:'italic 12px "DM Serif Display"', col:'rgba(250,247,242,0.42)'},
+    {t:'gen',   txt:'system',  font:'300 11px DM Sans', col:'rgba(250,247,242,0.38)'},
+    {t:'gen',   txt:'track',   font:'400 11px DM Sans', col:'rgba(250,247,242,0.35)'},
+    {t:'gen',   txt:'tabs',    font:'700 12px DM Sans', col:'rgba(232,104,74,0.5)'},
+    {t:'gen',   txt:'time',    font:'300 10px DM Sans', col:'rgba(250,247,242,0.32)'},
+  ];
+
+  const particles=words.map((w,i)=>{
+    const type=['orbiter','floater','drifter'][i%3];
+    const angle=(i/words.length)*Math.PI*2;
+    const r=80+Math.random()*100;
+    return {
+      w, type,
+      angle: angle+Math.random()*0.5,
+      r: r,
+      speed: (0.0003+Math.random()*0.0004)*(Math.random()<0.5?1:-1),
+      oy: Math.random()*H,
+      ox: Math.random()*W,
+      vy: -0.2-Math.random()*0.3,
+      vx: (Math.random()-0.5)*0.4,
+      phase: Math.random()*Math.PI*2,
+      born: Date.now()+i*120,
+      alpha: 0,
+    };
+  });
+
+  function easeOut(t){return 1-Math.pow(1-t,3);}
+
+  let running=true;
+  function frame(){
+    if(!running)return;
+    ctx.clearRect(0,0,W,H);
+    const now=Date.now();
+    particles.forEach(p=>{
+      const age=(now-p.born)/1000;
+      if(age<0)return;
+      p.alpha=Math.min(1,age/0.8);
+
+      if(p.type==='orbiter'){
+        p.angle+=p.speed;
+        const x=cx+Math.cos(p.angle)*p.r;
+        const y=cy+Math.sin(p.angle)*(p.r*0.55);
+        const depth=0.7+0.3*((Math.sin(p.angle)+1)/2);
+        ctx.globalAlpha=p.alpha*depth*0.88;
+        ctx.font=p.w.font;
+        ctx.fillStyle=p.w.col;
+        ctx.fillText(p.w.txt,x,y);
+      } else if(p.type==='floater'){
+        p.oy+=p.vy;
+        p.ox+=p.vx;
+        if(p.oy<-20){p.oy=H+10;p.ox=cx-80+Math.random()*160;p.alpha=0;}
+        ctx.globalAlpha=p.alpha*Math.min(1,(H-Math.abs(p.oy-H/2))/(H/2))*0.7;
+        ctx.font=p.w.font;
+        ctx.fillStyle=p.w.col;
+        ctx.fillText(p.w.txt,p.ox,p.oy);
+      } else {
+        const wobble=Math.sin(now*0.001+p.phase)*18;
+        p.ox+=p.vx*0.5;
+        if(p.ox<-60)p.ox=W+40;
+        if(p.ox>W+60)p.ox=-40;
+        ctx.globalAlpha=p.alpha*0.65;
+        ctx.font=p.w.font;
+        ctx.fillStyle=p.w.col;
+        ctx.fillText(p.w.txt,p.ox,p.oy+wobble);
+      }
+    });
+    ctx.globalAlpha=1;
+    requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+// ══════════════════════════════════════
+// SLIDE 2 — STAT COUNTERS
+// ══════════════════════════════════════
+function initStats(){
+  function easeOut(t){return 1-Math.pow(1-t,4);}
+  const stats=[
+    {card:'sc1',num:'sn1',prefix:'',target:16,suffix:'M+',dur:1800,cDelay:200,nDelay:400},
+    {card:'sc2',num:'sn2',prefix:'~',target:4,suffix:'M',dur:1600,cDelay:500,nDelay:700},
+    {card:'sc3',num:'sn3',prefix:'',target:3,suffix:'×',dur:1200,cDelay:800,nDelay:1000},
+    {card:'sc4',num:'sn4',prefix:'$',target:60,suffix:'B',dur:2000,cDelay:1100,nDelay:1300},
+  ];
+  stats.forEach(s=>{
+    setTimeout(()=>document.getElementById(s.card).classList.add('go'),s.cDelay);
+    setTimeout(()=>{
+      const el=document.getElementById(s.num);
+      const start=performance.now();
+      (function f(now){
+        const t=Math.min((now-start)/s.dur,1);
+        el.textContent=s.prefix+Math.floor(easeOut(t)*s.target)+s.suffix;
+        if(t<1)requestAnimationFrame(f);
+        else el.textContent=s.prefix+s.target+s.suffix;
+      })(performance.now());
+    },s.nDelay);
+  });
+}
+
+// ══════════════════════════════════════
+// SLIDE 6 — INPUT TILES
+// ══════════════════════════════════════
+function initTiles(){
+  for(let i=1;i<=8;i++){
+    setTimeout(()=>document.getElementById('it'+i).classList.add('go'),(i-1)*100+200);
+  }
+}
+
+// ══════════════════════════════════════
+// SLIDE 7 — TABS CARDS
+// ══════════════════════════════════════
+function initTabs(){
+  const delays=[300,600,900,1200];
+  ['tc1','tc2','tc3','tc4'].forEach((id,i)=>{
+    setTimeout(()=>document.getElementById(id).classList.add('go'),delays[i]);
+  });
+}
+</script>
+</body>
+</html>
