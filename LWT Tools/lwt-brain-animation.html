@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LWT — Brain Animation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&family=DM+Serif+Display:ital@0;1&family=Space+Mono:ital@0;1&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #111111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  .scene {
+    position: relative;
+    width: 960px;
+    height: 640px;
+  }
+
+  /* ── Glow halo behind brain ────────────────────── */
+  .brain-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -52%);
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,104,74,0.18) 0%, rgba(212,168,67,0.10) 45%, transparent 72%);
+    animation: glowPulse 4s ease-in-out infinite;
+    z-index: 1;
+  }
+  @keyframes glowPulse {
+    0%,100% { transform: translate(-50%,-52%) scale(1);   opacity: 0.8; }
+    50%      { transform: translate(-50%,-52%) scale(1.12); opacity: 1;   }
+  }
+
+  /* ── Brain image ───────────────────────────────── */
+  .brain-wrap {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -52%);
+    z-index: 10;
+    animation: brainFloat 5s ease-in-out infinite;
+  }
+  .brain-wrap img {
+    width: 340px;
+    height: 340px;
+    object-fit: contain;
+    mix-blend-mode: screen;  /* makes black background transparent */
+    display: block;
+  }
+  @keyframes brainFloat {
+    0%,100% { transform: translate(-50%,-52%) translateY(0px);   }
+    50%      { transform: translate(-50%,-52%) translateY(-8px);  }
+  }
+
+  /* ── Vignette edges ────────────────────────────── */
+  .vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 55%, #111111 100%);
+    z-index: 20;
+    pointer-events: none;
+  }
+
+  /* ── Words ─────────────────────────────────────── */
+  .word {
+    position: absolute;
+    pointer-events: none;
+    white-space: nowrap;
+    opacity: 0;
+    z-index: 15;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+
+  /* font classes */
+  .f-sans   { font-family: 'DM Sans', sans-serif; }
+  .f-serif  { font-family: 'DM Serif Display', serif; }
+  .f-mono   { font-family: 'Space Mono', monospace; }
+  .f-syne   { font-family: 'Syne', sans-serif; }
+  .fw-light  { font-weight: 300; }
+  .fw-reg    { font-weight: 400; }
+  .fw-med    { font-weight: 500; }
+  .fw-bold   { font-weight: 700; }
+  .fw-black  { font-weight: 800; }
+  .fi        { font-style: italic; }
+
+  /* ── Brand mark ────────────────────────────────── */
+  .brand {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #E8684A;
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    opacity: 0.55;
+    z-index: 25;
+  }
+  .tagline {
+    position: absolute;
+    bottom: 46px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(250,247,242,0.28);
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 13.5px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    z-index: 25;
+    animation: tagFade 2.5s ease-in 1s forwards;
+    opacity: 0;
+  }
+  @keyframes tagFade { to { opacity: 1; } }
+</style>
+</head>
+<body>
+<div class="scene">
+  <div class="brain-glow"></div>
+  <div class="brain-wrap">
+    <img src="../brain1.png" alt="brain">
+  </div>
+  <div class="vignette"></div>
+  <div id="wordField" style="position:absolute;inset:0;z-index:15;"></div>
+  <div class="tagline">Stop surviving your brain. Start working with it.</div>
+  <div class="brand">Life With Tabs™</div>
+</div>
+
+<script>
+const SCENE_W = 960;
+const SCENE_H = 640;
+const CX = 480;
+const CY = 300;
+
+// ── Word definitions ──────────────────────────────────────────
+// font: 'sans' | 'serif' | 'mono' | 'syne'
+// weight: 'light' | 'reg' | 'med' | 'bold' | 'black'
+// italic: bool
+// size: base px size
+// color: hex
+
+const WORDS = [
+  // Urgent / racing thoughts
+  { text: "that email",          font:'sans',  weight:'med',   size:13, color:'#E8684A', italic:false },
+  { text: "FOCUS.",              font:'syne',  weight:'black', size:22, color:'#E8684A', italic:false },
+  { text: "the deadline",        font:'mono',  weight:'reg',   size:12, color:'#FAF7F2', italic:false },
+  { text: "don't forget",        font:'sans',  weight:'bold',  size:14, color:'#E8684A', italic:false },
+  { text: "47 tabs open",        font:'syne',  weight:'bold',  size:18, color:'#FAF7F2', italic:false },
+  { text: "is that due?",        font:'mono',  weight:'reg',   size:11, color:'#9E9E9E', italic:false },
+  { text: "the invoice",         font:'sans',  weight:'reg',   size:12, color:'#FAF7F2', italic:false },
+  { text: "reply to her",        font:'mono',  weight:'reg',   size:11, color:'#9E9E9E', italic:false },
+  { text: "send the file",       font:'sans',  weight:'light', size:11, color:'#9E9E9E', italic:false },
+  { text: "tax stuff",           font:'mono',  weight:'reg',   size:12, color:'#E8684A', italic:false },
+  { text: "the meeting",         font:'sans',  weight:'med',   size:13, color:'#8B9D6A', italic:false },
+  { text: "one more thing",      font:'sans',  weight:'bold',  size:14, color:'#E8684A', italic:false },
+  { text: "check on that",       font:'mono',  weight:'reg',   size:11, color:'#9E9E9E', italic:false },
+  { text: "forgot again",        font:'sans',  weight:'med',   size:13, color:'#E8684A', italic:true  },
+
+  // Scattered / distracted
+  { text: "wait...",             font:'serif', weight:'reg',   size:16, color:'#FAF7F2', italic:true  },
+  { text: "what was I doing?",   font:'serif', weight:'reg',   size:13, color:'#9E9E9E', italic:true  },
+  { text: "where was I?",        font:'serif', weight:'reg',   size:14, color:'#FAF7F2', italic:true  },
+  { text: "oh wait—",            font:'serif', weight:'reg',   size:15, color:'#E8684A', italic:true  },
+  { text: "actually...",         font:'serif', weight:'reg',   size:16, color:'#D4A843', italic:true  },
+  { text: "but first—",          font:'serif', weight:'reg',   size:14, color:'#E8684A', italic:true  },
+  { text: "not now",             font:'sans',  weight:'light', size:11, color:'#9E9E9E', italic:true  },
+  { text: "tomorrow...",         font:'serif', weight:'reg',   size:13, color:'#9E9E9E', italic:true  },
+  { text: "where are my keys?",  font:'sans',  weight:'reg',   size:11, color:'#9E9E9E', italic:false },
+  { text: "what time is it?",    font:'mono',  weight:'reg',   size:10, color:'#9E9E9E', italic:false },
+  { text: "did I eat?",          font:'serif', weight:'reg',   size:13, color:'#FAF7F2', italic:true  },
+
+  // Creative / bright
+  { text: "new idea ✦",          font:'syne',  weight:'bold',  size:16, color:'#D4A843', italic:false },
+  { text: "great idea!",         font:'syne',  weight:'bold',  size:15, color:'#8B9D6A', italic:false },
+  { text: "what if...",          font:'serif', weight:'reg',   size:15, color:'#D4A843', italic:true  },
+  { text: "new product idea",    font:'sans',  weight:'med',   size:13, color:'#D4A843', italic:false },
+  { text: "content idea",        font:'sans',  weight:'med',   size:12, color:'#D4A843', italic:false },
+  { text: "another idea...",     font:'serif', weight:'reg',   size:14, color:'#D4A843', italic:true  },
+  { text: "almost there",        font:'sans',  weight:'med',   size:12, color:'#8B9D6A', italic:false },
+  { text: "so many tabs",        font:'syne',  weight:'bold',  size:16, color:'#FAF7F2', italic:false },
+  { text: "back to this",        font:'mono',  weight:'reg',   size:11, color:'#8B9D6A', italic:false },
+  { text: "I should...",         font:'serif', weight:'reg',   size:14, color:'#FAF7F2', italic:true  },
+  { text: "follow up",           font:'sans',  weight:'med',   size:13, color:'#8B9D6A', italic:false },
+  { text: "reschedule",          font:'mono',  weight:'reg',   size:11, color:'#9E9E9E', italic:false },
+  { text: "the thing I forgot",  font:'sans',  weight:'light', size:12, color:'#9E9E9E', italic:true  },
+  { text: "quick question",      font:'mono',  weight:'reg',   size:10, color:'#9E9E9E', italic:false },
+  { text: "the password",        font:'mono',  weight:'reg',   size:10, color:'#8B9D6A', italic:false },
+];
+
+// ── Font class map ────────────────────────────────────────────
+function applyFont(el, word) {
+  const fontMap = { sans:'f-sans', serif:'f-serif', mono:'f-mono', syne:'f-syne' };
+  const wMap = { light:'fw-light', reg:'fw-reg', med:'fw-med', bold:'fw-bold', black:'fw-black' };
+  el.classList.add(fontMap[word.font] || 'f-sans');
+  el.classList.add(wMap[word.weight] || 'fw-reg');
+  if (word.italic) el.classList.add('fi');
+}
+
+// ── Helpers ───────────────────────────────────────────────────
+function rand(min, max) { return min + Math.random() * (max - min); }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+const field = document.getElementById('wordField');
+
+// ── Particle class ────────────────────────────────────────────
+class Particle {
+  constructor(wordDef, type) {
+    this.el = document.createElement('span');
+    this.el.className = 'word';
+    field.appendChild(this.el);
+    this.assign(wordDef, type);
+  }
+
+  assign(wordDef, type) {
+    this.wordDef = wordDef;
+    this.type = type;
+    this.el.textContent = wordDef.text;
+    this.el.className = 'word';
+    applyFont(this.el, wordDef);
+    this.el.style.color = wordDef.color;
+    this.el.style.fontSize = wordDef.size + 'px';
+    this.el.style.opacity = 0;
+    this.el.style.transform = '';
+    this.life = 0;
+    this.delay = rand(0, 80);
+    this.initType();
+  }
+
+  initType() {
+    switch(this.type) {
+      case 'orbiter': {
+        this.angle = rand(0, Math.PI * 2);
+        this.rx = rand(155, 230);            // x radius
+        this.ry = this.rx * rand(0.42, 0.60); // y radius (flatter ellipse)
+        this.speed = rand(0.003, 0.007) * (Math.random() < 0.5 ? 1 : -1);
+        this.baseOpacity = rand(0.45, 0.80);
+        this.maxLife = rand(700, 1200);
+        break;
+      }
+      case 'drifter': {
+        this.dir = Math.random() < 0.5 ? 1 : -1;
+        this.y = rand(30, SCENE_H - 40);
+        this.x = this.dir > 0 ? -150 : SCENE_W + 10;
+        this.speed = rand(0.22, 0.55);
+        this.maxLife = (SCENE_W + 160) / this.speed;
+        this.baseOpacity = rand(0.28, 0.65);
+        this.wobble = rand(0, Math.PI * 2);
+        this.wobbleAmp = rand(6, 22);
+        this.wobbleFreq = rand(0.006, 0.016);
+        break;
+      }
+      case 'floater': {
+        const a = rand(0, Math.PI * 2);
+        const r = rand(70, 130);
+        this.x = CX + Math.cos(a) * r * 1.1 - 30;
+        this.y = CY + Math.sin(a) * r * 0.7;
+        this.vy = -rand(0.35, 0.75);
+        this.vx = rand(-0.25, 0.25);
+        this.maxLife = rand(140, 220);
+        this.baseOpacity = rand(0.5, 0.85);
+        break;
+      }
+      case 'scatter': {
+        let x, y;
+        do {
+          x = rand(30, SCENE_W - 30);
+          y = rand(30, SCENE_H - 30);
+        } while (Math.hypot(x - CX, (y - CY) * 1.6) < 155);
+        this.x = x; this.y = y;
+        this.maxLife = rand(90, 160);
+        this.baseOpacity = rand(0.25, 0.55);
+        break;
+      }
+    }
+  }
+
+  update() {
+    if (this.delay > 0) { this.delay--; return; }
+    this.life++;
+    const p = this.life / this.maxLife;
+
+    switch(this.type) {
+      case 'orbiter': {
+        this.angle += this.speed;
+        const x = CX + Math.cos(this.angle) * this.rx - 30;
+        const y = CY + Math.sin(this.angle) * this.ry - 10;
+        // depth: front = more opaque & larger
+        const depth = 0.65 + 0.35 * Math.sin(this.angle + Math.PI / 2);
+        const alpha = this.baseOpacity * depth;
+        const scale = 0.78 + 0.32 * depth;
+        this.el.style.left = x + 'px';
+        this.el.style.top  = y + 'px';
+        this.el.style.opacity = alpha;
+        this.el.style.transform = `scale(${scale.toFixed(3)})`;
+        this.el.style.zIndex = depth > 0.85 ? 18 : 12;
+        if (this.life >= this.maxLife) this.retire();
+        break;
+      }
+      case 'drifter': {
+        this.x += this.speed * this.dir;
+        const wob = Math.sin(this.life * this.wobbleFreq + this.wobble) * this.wobbleAmp;
+        const alpha = p < 0.12 ? (p / 0.12) * this.baseOpacity
+                    : p > 0.85 ? ((1 - p) / 0.15) * this.baseOpacity
+                    : this.baseOpacity;
+        this.el.style.left = this.x + 'px';
+        this.el.style.top  = (this.y + wob) + 'px';
+        this.el.style.opacity = Math.max(0, alpha);
+        if (this.life >= this.maxLife) this.retire();
+        break;
+      }
+      case 'floater': {
+        this.x += this.vx;
+        this.y += this.vy;
+        const alpha = p < 0.18 ? (p / 0.18) * this.baseOpacity
+                    : p > 0.55 ? ((1 - p) / 0.45) * this.baseOpacity
+                    : this.baseOpacity;
+        this.el.style.left = this.x + 'px';
+        this.el.style.top  = this.y + 'px';
+        this.el.style.opacity = Math.max(0, alpha);
+        if (this.life >= this.maxLife) this.retire();
+        break;
+      }
+      case 'scatter': {
+        const alpha = p < 0.18 ? (p / 0.18) * this.baseOpacity
+                    : p > 0.62 ? ((1 - p) / 0.38) * this.baseOpacity
+                    : this.baseOpacity;
+        this.el.style.left = this.x + 'px';
+        this.el.style.top  = this.y + 'px';
+        this.el.style.opacity = Math.max(0, alpha);
+        if (this.life >= this.maxLife) this.retire();
+        break;
+      }
+    }
+  }
+
+  retire() {
+    this.el.style.opacity = 0;
+    // pick new random word + type
+    const newWord = WORDS[Math.floor(Math.random() * WORDS.length)];
+    const newType = pickType();
+    setTimeout(() => this.assign(newWord, newType), rand(100, 500));
+  }
+}
+
+function pickType() {
+  const r = Math.random();
+  if (r < 0.28) return 'orbiter';
+  if (r < 0.58) return 'drifter';
+  if (r < 0.78) return 'floater';
+  return 'scatter';
+}
+
+// ── Spawn ─────────────────────────────────────────────────────
+const TOTAL = 32;
+const shuffled = shuffle(WORDS);
+const bootTypes = [
+  ...Array(7).fill('orbiter'),
+  ...Array(12).fill('drifter'),
+  ...Array(8).fill('floater'),
+  ...Array(5).fill('scatter'),
+];
+
+const particles = [];
+for (let i = 0; i < TOTAL; i++) {
+  const p = new Particle(shuffled[i % shuffled.length], bootTypes[i]);
+  p.delay = i * 15;  // stagger so they don't all appear at once
+  particles.push(p);
+}
+
+// ── Loop ──────────────────────────────────────────────────────
+function loop() {
+  particles.forEach(p => p.update());
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
