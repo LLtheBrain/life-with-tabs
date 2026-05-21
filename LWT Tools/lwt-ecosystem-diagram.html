@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LWT — Ecosystem Diagram</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #111111;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 38px 38px;
+    pointer-events: none;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.2s forwards;
+  }
+  .header-label {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: #E8684A;
+    margin-bottom: 8px;
+  }
+  .header-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: #FAF7F2;
+  }
+  .header-title em { color: #E8684A; font-style: italic; }
+
+  .diagram-wrap {
+    width: 1100px;
+    height: 560px;
+    position: relative;
+  }
+
+  /* lines start invisible */
+  .spoke {
+    stroke-dashoffset: 240;
+    stroke-dasharray: 240;
+  }
+
+  /* node groups and labels start hidden */
+  .node-g   { opacity: 0; }
+  .node-lbl { opacity: 0; }
+
+  /* pulse rings */
+  .pr { opacity: 0; }
+  .pr.go { animation: pulseOut 2.2s ease-out infinite; }
+  @keyframes pulseOut {
+    0%   { r: 50; opacity: 0.5; }
+    100% { r: 105; opacity: 0; }
+  }
+
+  .replay-wrap {
+    margin-top: 6px;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .replay-btn {
+    background: none;
+    border: 1px solid rgba(232,104,74,0.4);
+    color: #E8684A;
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 9px 22px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .replay-btn:hover { background: rgba(232,104,74,0.1); }
+
+  .brand {
+    position: fixed;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #E8684A;
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    opacity: 0.3;
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(14px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">▶ The LWT Ecosystem</div>
+  <div class="header-title">One brand. <em>Multiple entry points.</em></div>
+</div>
+
+<div class="diagram-wrap">
+<!--
+  Canvas: 1100 × 560
+  Center hub: (550, 285)
+  Spoke radius: 220px
+  Pentagon — flat top — node angles (from 12 o'clock, clockwise):
+    Corporate  ≈  330° → upper-right  → (741, 175)
+    TABS Tool  ≈   30° → right        → (741, 395)  -- wait let me recalc
+
+  Let me place them intentionally (not pure pentagon) for visual balance:
+    Top-center     270°: Corporate  (550, 65)   -- above center
+    Right          0°:   TABS Tool  (770, 285)  -- pure right
+    Lower-right    126°: YouTube    (680, 493)  -- lower right  -- actually let me use 115°
+    Lower-left     234°: Coffee     (370, 420)  --
+    Upper-left     295°: Speaking   (430, 85)   --
+
+  Better: use these clean clock positions:
+    12:00 (270°): Corporate B2B
+     3:00 (  0°): TABS System
+     5:00 ( 60°): YouTube/Content
+     7:00 (120°): CAM's Coffee
+    10:00 (240°): Speaking/Keynote
+
+  With r=220:
+    270°: x=550+220*0=550,       y=285-220=65          → Corporate   (550, 65)
+      0°: x=550+220=770,         y=285+0=285           → TABS System (770, 285)
+     60°: x=550+110=660,         y=285+190.5=476       → YouTube     (660, 476)
+    120°: x=550-110=440,         y=285+190.5=476       → Coffee      (440, 476)
+    240°: x=550-110=440,         y=285-190.5=95        → Speaking    (440, 95)
+
+  Line lengths:
+    (550,65)  → 220  ✓
+    (770,285) → 220  ✓
+    (660,476) → sqrt(110²+191²) = sqrt(12100+36481) = 220 ✓
+    (440,476) → same = 220 ✓
+    (440,95)  → same = 220 ✓
+
+  Label positions (outside nodes, radius 42):
+    Corporate (550,65):   label ABOVE, y ≈ 10-20, anchor middle
+    TABS (770,285):       label RIGHT, x=822, anchor start
+    YouTube (660,476):    label BELOW-RIGHT, y=530, anchor middle
+    Coffee (440,476):     label BELOW-LEFT, y=530, anchor middle
+    Speaking (440,95):    label LEFT, x=388, anchor end
+-->
+<svg id="diagram" viewBox="0 0 1100 560" width="1100" height="560" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="nodeGlow">
+      <feGaussianBlur stdDeviation="9" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- ── Pulse rings ─────────────────────── -->
+  <circle class="pr" id="pr1" cx="550" cy="285" r="50" fill="none" stroke="#E8684A" stroke-width="1"/>
+  <circle class="pr" id="pr2" cx="550" cy="285" r="50" fill="none" stroke="#E8684A" stroke-width="0.5"/>
+
+  <!-- ── Spoke lines ─────────────────────── -->
+  <!-- Corporate: (550,285)→(550,65) -->
+  <line class="spoke" id="s-corp"    x1="550" y1="285" x2="550" y2="65"  stroke="#C0956F" stroke-width="1.5" opacity="0.7"/>
+  <!-- TABS System: (550,285)→(770,285) -->
+  <line class="spoke" id="s-tabs"    x1="550" y1="285" x2="770" y2="285" stroke="#E8684A" stroke-width="2"   opacity="0.8"/>
+  <!-- YouTube: (550,285)→(660,476) -->
+  <line class="spoke" id="s-yt"      x1="550" y1="285" x2="660" y2="476" stroke="#D4A843" stroke-width="1.5" opacity="0.7"/>
+  <!-- Coffee: (550,285)→(440,476) -->
+  <line class="spoke" id="s-coffee"  x1="550" y1="285" x2="440" y2="476" stroke="#8B9D6A" stroke-width="1.5" opacity="0.7"/>
+  <!-- Speaking: (550,285)→(330,285) pure left, parallel to TABS -->
+  <line class="spoke" id="s-speak"   x1="550" y1="285" x2="330" y2="285" stroke="rgba(250,247,242,0.6)" stroke-width="1.5" opacity="0.8"/>
+
+  <!-- ══════════════════════════════════════════
+       CENTER HUB
+  ══════════════════════════════════════════ -->
+  <g id="hub" opacity="0">
+    <circle cx="550" cy="285" r="60" fill="rgba(232,104,74,0.06)" filter="url(#glow)"/>
+    <circle cx="550" cy="285" r="50" fill="none" stroke="#E8684A" stroke-width="1" stroke-dasharray="5 3.5" opacity="0.4"/>
+    <circle cx="550" cy="285" r="44" fill="#181818" stroke="#E8684A" stroke-width="2.2"/>
+    <text x="550" y="275" text-anchor="middle" font-size="18" fill="#E8684A">⚡</text>
+    <text x="550" y="291" text-anchor="middle" font-family="Syne,sans-serif" font-weight="800" font-size="8" fill="#FAF7F2" letter-spacing="1.5">LIFE WITH</text>
+    <text x="550" y="303" text-anchor="middle" font-family="Syne,sans-serif" font-weight="800" font-size="8" fill="#E8684A" letter-spacing="1.5">TABS™</text>
+  </g>
+
+  <!-- ══════════════════════════════════════════
+       NODE 1 — TABS SYSTEM  (right, 0°)
+       Center: (770, 285)
+  ══════════════════════════════════════════ -->
+  <g class="node-g" id="n-tabs">
+    <circle cx="770" cy="285" r="44" fill="#181818" stroke="#E8684A" stroke-width="2.2" filter="url(#nodeGlow)"/>
+    <text x="770" y="276" text-anchor="middle" font-size="17" fill="#E8684A">💻</text>
+    <text x="770" y="292" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="8" fill="#E8684A" letter-spacing="1">TABS</text>
+    <text x="770" y="303" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="8" fill="#E8684A" letter-spacing="1">SYSTEM</text>
+  </g>
+  <!-- label: right of node, x=824 -->
+  <g class="node-lbl" id="l-tabs">
+    <text x="824" y="280" font-family="Syne,sans-serif" font-weight="700" font-size="12" fill="#FAF7F2">The TABS System</text>
+    <text x="824" y="297" font-family="DM Sans,sans-serif" font-weight="300" font-size="10.5" fill="rgba(250,247,242,0.5)">Custom dashboard + built-in GPT</text>
+    <text x="824" y="311" font-family="DM Sans,sans-serif" font-weight="500" font-size="10" fill="#E8684A">$299 / session  ·  pilot</text>
+  </g>
+
+  <!-- ══════════════════════════════════════════
+       NODE 2 — YOUTUBE / CONTENT  (lower-right, 60°)
+       Center: (660, 476)
+  ══════════════════════════════════════════ -->
+  <g class="node-g" id="n-yt">
+    <circle cx="660" cy="476" r="42" fill="#181818" stroke="#D4A843" stroke-width="2.2" filter="url(#nodeGlow)"/>
+    <text x="660" y="467" text-anchor="middle" font-size="16" fill="#D4A843">▶</text>
+    <text x="660" y="483" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="8" fill="#D4A843" letter-spacing="1">CONTENT</text>
+  </g>
+  <!-- label: below node -->
+  <g class="node-lbl" id="l-yt">
+    <text x="660" y="530" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="11.5" fill="#FAF7F2">YouTube</text>
+    <text x="660" y="546" text-anchor="middle" font-family="DM Sans,sans-serif" font-weight="300" font-size="10" fill="rgba(250,247,242,0.5)">Timers · Focus Music · Study Sessions</text>
+  </g>
+
+  <!-- ══════════════════════════════════════════
+       NODE 3 — CAM'S COFFEE  (lower-left, 120°)
+       Center: (440, 476)
+  ══════════════════════════════════════════ -->
+  <g class="node-g" id="n-coffee">
+    <circle cx="440" cy="476" r="42" fill="#181818" stroke="#8B9D6A" stroke-width="2.2" filter="url(#nodeGlow)"/>
+    <text x="440" y="467" text-anchor="middle" font-size="16" fill="#8B9D6A">☕</text>
+    <text x="440" y="483" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="7.5" fill="#8B9D6A" letter-spacing="1">FUNCTIONAL</text>
+    <text x="440" y="494" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="7.5" fill="#8B9D6A" letter-spacing="1">COFFEE</text>
+  </g>
+  <!-- label: below node -->
+  <g class="node-lbl" id="l-coffee">
+    <text x="440" y="530" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="11.5" fill="#FAF7F2">CAM's Coffee Co.</text>
+    <text x="440" y="546" text-anchor="middle" font-family="DM Sans,sans-serif" font-weight="300" font-size="10" fill="rgba(250,247,242,0.5)">Inclusive employment · Functional blends</text>
+  </g>
+
+  <!-- ══════════════════════════════════════════
+       NODE 4 — SPEAKING  (pure left, 180°)
+       Center: (330, 285) — parallel to TABS
+  ══════════════════════════════════════════ -->
+  <g class="node-g" id="n-speak">
+    <circle cx="330" cy="285" r="42" fill="#181818" stroke="rgba(250,247,242,0.65)" stroke-width="2.2" filter="url(#nodeGlow)"/>
+    <text x="330" y="276" text-anchor="middle" font-size="16" fill="rgba(250,247,242,0.85)">🎤</text>
+    <text x="330" y="292" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="8" fill="rgba(250,247,242,0.7)" letter-spacing="1">KEYNOTE</text>
+  </g>
+  <!-- label: left of node, text-anchor end -->
+  <g class="node-lbl" id="l-speak">
+    <text x="278" y="280" text-anchor="end" font-family="Syne,sans-serif" font-weight="700" font-size="11.5" fill="#FAF7F2">Speaking</text>
+    <text x="278" y="296" text-anchor="end" font-family="DM Sans,sans-serif" font-weight="300" font-size="10" fill="rgba(250,247,242,0.5)">LWT keynote &amp; workshops</text>
+  </g>
+
+  <!-- ══════════════════════════════════════════
+       NODE 5 — CORPORATE / B2B  (top, 270°)
+       Center: (550, 65)
+  ══════════════════════════════════════════ -->
+  <g class="node-g" id="n-corp">
+    <circle cx="550" cy="65" r="42" fill="#181818" stroke="#C0956F" stroke-width="2.2" filter="url(#nodeGlow)"/>
+    <text x="550" y="56" text-anchor="middle" font-size="16" fill="#C0956F">🏢</text>
+    <text x="550" y="71" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="7.5" fill="#C0956F" letter-spacing="1">CORPORATE</text>
+    <text x="550" y="82" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="7.5" fill="#C0956F" letter-spacing="1">/ B2B ↗</text>
+  </g>
+  <!-- label: right of node (to avoid left side crowding) -->
+  <g class="node-lbl" id="l-corp">
+    <text x="602" y="58" text-anchor="start" font-family="Syne,sans-serif" font-weight="700" font-size="11.5" fill="#FAF7F2">TABS for Inclusive Leadership</text>
+    <text x="602" y="74" text-anchor="start" font-family="DM Sans,sans-serif" font-weight="300" font-size="10" fill="rgba(250,247,242,0.5)">HR · DEI · Corporate training  ·  future</text>
+  </g>
+
+</svg>
+</div>
+
+<div class="replay-wrap" id="replayWrap">
+  <button class="replay-btn" onclick="runSequence()">↺ Replay</button>
+</div>
+
+<div class="brand">Life With Tabs™</div>
+
+<script>
+// ── Helpers ────────────────────────────────────────────────────
+function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+function drawLine(el, duration, delay, cb) {
+  const len = parseFloat(el.getAttribute('stroke-dasharray') || 240);
+  el.style.strokeDasharray = len;
+  el.style.strokeDashoffset = len;
+  setTimeout(() => {
+    const start = performance.now();
+    (function frame(now) {
+      const t = Math.min((now - start) / duration, 1);
+      el.style.strokeDashoffset = len * (1 - easeOut(t));
+      if (t < 1) requestAnimationFrame(frame);
+      else { el.style.strokeDashoffset = 0; if (cb) cb(); }
+    })(performance.now());
+  }, delay);
+}
+
+function popIn(el, delay, cb) {
+  setTimeout(() => {
+    el.style.transition = 'none';
+    el.style.opacity = 0;
+    el.style.transform = 'scale(0.4)';
+    el.style.transformOrigin = el.dataset.tx ? `${el.dataset.tx}px ${el.dataset.ty}px` : '50% 50%';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      el.style.transition = 'opacity 0.35s ease, transform 0.45s cubic-bezier(0.34,1.56,0.64,1)';
+      el.style.opacity = 1;
+      el.style.transform = 'scale(1)';
+      if (cb) setTimeout(cb, 450);
+    }));
+  }, delay);
+}
+
+function fadeEl(el, delay) {
+  setTimeout(() => {
+    el.style.transition = 'opacity 0.5s ease';
+    el.style.opacity = 1;
+  }, delay);
+}
+
+function resetAll() {
+  ['s-tabs','s-yt','s-coffee','s-speak','s-corp'].forEach(id => {
+    const el = document.getElementById(id);
+    el.style.strokeDasharray = 240;
+    el.style.strokeDashoffset = 240;
+  });
+  ['n-tabs','n-yt','n-coffee','n-speak','n-corp'].forEach(id => {
+    const el = document.getElementById(id);
+    el.style.opacity = 0;
+    el.style.transform = 'scale(0.4)';
+    el.style.transition = 'none';
+  });
+  ['l-tabs','l-yt','l-coffee','l-speak','l-corp'].forEach(id => {
+    document.getElementById(id).style.opacity = 0;
+  });
+  document.getElementById('hub').style.opacity = 0;
+  document.getElementById('hub').style.transform = 'scale(0.5)';
+  document.getElementById('hub').style.transition = 'none';
+  document.getElementById('pr1').classList.remove('go');
+  document.getElementById('pr2').classList.remove('go');
+  document.getElementById('replayWrap').style.opacity = 0;
+}
+
+function runSequence() {
+  resetAll();
+
+  // Center hub — scale in
+  setTimeout(() => {
+    const hub = document.getElementById('hub');
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      hub.style.transition = 'opacity 0.55s ease, transform 0.65s cubic-bezier(0.34,1.56,0.64,1)';
+      hub.style.transformOrigin = '550px 285px';
+      hub.style.opacity = 1;
+      hub.style.transform = 'scale(1)';
+    }));
+    setTimeout(() => {
+      document.getElementById('pr1').classList.add('go');
+      setTimeout(() => document.getElementById('pr2').classList.add('go'), 700);
+    }, 650);
+  }, 500);
+
+  // Spokes + nodes in order: TABS → YouTube → Coffee → Speaking → Corporate
+  const seq = [
+    { line:'s-tabs',   node:'n-tabs',   label:'l-tabs',   lineDelay:1050, nodeDelay:1480, lblDelay:1700, nx:'770', ny:'285' },
+    { line:'s-yt',     node:'n-yt',     label:'l-yt',     lineDelay:1700, nodeDelay:2130, lblDelay:2350, nx:'660', ny:'476' },
+    { line:'s-coffee', node:'n-coffee', label:'l-coffee', lineDelay:2350, nodeDelay:2780, lblDelay:3000, nx:'440', ny:'476' },
+    { line:'s-speak',  node:'n-speak',  label:'l-speak',  lineDelay:3000, nodeDelay:3430, lblDelay:3650, nx:'330', ny:'285' },
+    { line:'s-corp',   node:'n-corp',   label:'l-corp',   lineDelay:3650, nodeDelay:4080, lblDelay:4300, nx:'550', ny:'65'  },
+  ];
+
+  seq.forEach(({ line, node, label, lineDelay, nodeDelay, lblDelay, nx, ny }) => {
+    drawLine(document.getElementById(line), 380, lineDelay);
+
+    setTimeout(() => {
+      const n = document.getElementById(node);
+      n.dataset.tx = nx;
+      n.dataset.ty = ny;
+      n.style.transition = 'none';
+      n.style.transformOrigin = `${nx}px ${ny}px`;
+      n.style.transform = 'scale(0.3)';
+      n.style.opacity = 0;
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        n.style.transition = 'opacity 0.35s ease, transform 0.48s cubic-bezier(0.34,1.56,0.64,1)';
+        n.style.opacity = 1;
+        n.style.transform = 'scale(1)';
+      }));
+    }, nodeDelay);
+
+    fadeEl(document.getElementById(label), lblDelay);
+  });
+
+  // Replay btn
+  setTimeout(() => {
+    document.getElementById('replayWrap').style.opacity = 1;
+  }, 5000);
+}
+
+window.addEventListener('load', () => setTimeout(runSequence, 400));
+</script>
+</body>
+</html>
